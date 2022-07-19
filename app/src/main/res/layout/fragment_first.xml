@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1920dp"
+    android:layout_height="720dp"
+    tools:context=".fragment.FirstFragment"
+    android:id="@+id/firstfragme">
+
+        <Button
+            android:id="@+id/musisbutton"
+            android:layout_width="420dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="322dp"
+            android:layout_marginTop="100dp"
+            android:text="音乐模式"
+            android:textColor="#A9A9A9"
+            android:background="@drawable/first_moshi_brun"
+            android:textSize="38sp" />
+
+        <Button
+            android:id="@+id/showbutton"
+            android:layout_width="420dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="322dp"
+            android:layout_marginTop="188dp"
+            android:textSize="38sp"
+            android:text="展示模式"
+            android:textColor="#A9A9A9"
+            android:background="@drawable/first_moshi_brun" />
+
+    <!--                    //解决自定义模式层级过高问题-->
+    <!--                    方案一：通过recaclerview-->
+    <!--                    方案二：合并层级，背景图拼接为一个图片-->
+        <ScrollView
+            android:layout_width="420dp"
+            android:layout_height="296dp"
+            android:layout_marginTop="311dp"
+            android:layout_marginLeft="322dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+<!--                自定义模式1-->
+                <RelativeLayout
+                    android:id="@+id/view1"
+                    android:layout_width="416dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/first_moshi_brun"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp">
+                    <TextView
+                        android:id="@+id/text1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自定义模式"
+                        android:textSize="24sp"
+                        android:textColor="#FFF"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="64dp"/>
+                    <Button
+                        android:id="@+id/view1_set"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_marginLeft="333dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@mipmap/viewset"/>
+                    <Button
+                        android:id="@+id/shezhi1"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:text="编译"
+                        android:layout_marginLeft="246dp"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/shanchu1"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="326dp"
+                        android:visibility="gone"
+                        android:text="删除" />
+
+                </RelativeLayout>
+<!--                自定义模式2-->
+                <RelativeLayout
+                    android:id="@+id/view2"
+                    android:layout_width="416dp"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/first_moshi_brun">
+
+                    <TextView
+                        android:id="@+id/text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="64dp"
+                        android:layout_marginTop="20dp"
+                        android:text="自定义模式"
+                        android:textColor="#FFF"
+                        android:textSize="24sp" />
+
+                    <Button
+                        android:id="@+id/view2_set"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="333dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@mipmap/viewset"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <Button
+                        android:id="@+id/shezhi2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="246dp"
+                        android:text="编译"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/shanchu2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="326dp"
+                        android:text="删除"
+                        android:visibility="gone" />
+                </RelativeLayout>
+<!--                自定义模式3-->
+                <RelativeLayout
+                    android:id="@+id/view3"
+                    android:layout_width="416dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/first_moshi_brun"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp">
+                    <TextView
+                        android:id="@+id/text3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自定义模式"
+                        android:textSize="24sp"
+                        android:textColor="#FFF"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="64dp"/>
+                    <Button
+                        android:id="@+id/view3_set"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_marginLeft="333dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@mipmap/viewset"/>
+                    <Button
+                        android:id="@+id/shezhi3"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:text="编译"
+                        android:layout_marginLeft="246dp"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/shanchu3"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="326dp"
+                        android:visibility="gone"
+                        android:text="删除" />
+                </RelativeLayout>
+<!--                自定义模式4-->
+                <RelativeLayout
+                    android:id="@+id/view4"
+                    android:layout_width="416dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/first_moshi_brun"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp">
+                    <TextView
+                        android:id="@+id/text4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自定义模式"
+                        android:textSize="24sp"
+                        android:textColor="#FFF"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="64dp"/>
+                    <Button
+                        android:id="@+id/view4_set"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_marginLeft="333dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@mipmap/viewset"/>
+                    <Button
+                        android:id="@+id/shezhi4"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:text="编译"
+                        android:layout_marginLeft="246dp"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/shanchu4"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="326dp"
+                        android:visibility="gone"
+                        android:text="删除" />
+                </RelativeLayout>
+<!--                自定义模式5-->
+                <RelativeLayout
+                    android:id="@+id/view5"
+                    android:layout_width="416dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/first_moshi_brun"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp">
+                    <TextView
+                        android:id="@+id/text5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自定义模式"
+                        android:textSize="24sp"
+                        android:textColor="#FFF"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="64dp"/>
+                    <Button
+                        android:id="@+id/view5_set"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/ic_launcher"
+                        android:layout_marginLeft="333dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@mipmap/viewset"/>
+                    <Button
+                        android:id="@+id/shezhi5"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:text="编译"
+                        android:layout_marginLeft="246dp"
+                        android:visibility="gone" />
+                    <Button
+                        android:id="@+id/shanchu5"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginLeft="326dp"
+                        android:visibility="gone"
+                        android:text="删除" />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </ScrollView>
+        <Button
+            android:id="@+id/firsttianjia"
+            android:layout_width="480dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="600dp"
+            android:layout_marginLeft="292dp"
+            android:background="@mipmap/tianjiafist"/>
+
+    <RelativeLayout
+        android:layout_width="500dp"
+        android:layout_height="292dp"
+        android:layout_marginLeft="789dp"
+        android:layout_marginTop="60dp"
+        android:orientation="vertical"
+        android:background="@mipmap/timebrun">
+    </RelativeLayout>
+<!--    tq_clt-->
+
+    <RelativeLayout
+        android:layout_width="450dp"
+        android:layout_height="292dp"
+        android:layout_marginLeft="839dp"
+        android:layout_marginTop="368dp"
+        android:orientation="vertical"
+        android:background="@mipmap/carzhuangtaibrun">
+        <!--        tq_clt-->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="440dp"
+        android:layout_height="600dp"
+        android:layout_marginLeft="1356dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/home_moshi_brun">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="411dp"
+            android:textColor="#fff"
+            android:textSize="24sp"
+            android:text="巴拉巴拉小魔仙"/>
+
+        <ImageView
+            android:id="@+id/imagemv"
+            android:layout_width="360dp"
+            android:layout_height="360dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:background="@mipmap/mv1" />
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/mediautil"
+            android:layout_width="360dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="450dp"
+            android:background="@drawable/caeset_h_z_d_brun"
+            />
+
+        <ImageButton
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:src="@mipmap/bofang"
+            android:layout_marginLeft="174dp"
+            android:layout_marginTop="472dp"
+            />
+        <ImageButton
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:src="@mipmap/bofang"
+            android:layout_marginLeft="174dp"
+            android:layout_marginTop="472dp"
+            />
+<!--        上一首-->
+        <ImageButton
+            android:id="@+id/shangyis"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:src="@mipmap/shangyis"
+            android:background="@color/tm"
+            android:layout_marginLeft="84dp"
+            android:layout_marginTop="472dp" />
+<!--        播放-->
+        <ImageButton
+            android:id="@+id/bofang"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:src="@mipmap/bofang"
+            android:background="@color/tm"
+            android:layout_marginLeft="174dp"
+            android:layout_marginTop="472dp" />
+<!--        下一首-->
+        <ImageButton
+            android:id="@+id/xiayiso"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:src="@mipmap/xiayis"
+            android:background="@color/tm"
+            android:layout_marginLeft="270dp"
+            android:layout_marginTop="472dp" />
+<!--        暂停-->
+<!--        现在背景颜色为透明状态-->
+        <ImageButton
+            android:id="@+id/zanting"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_marginLeft="172dp"
+            android:layout_marginTop="500dp"
+            android:background="@color/tm"/>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.CarsetFragment">
+
+
+<!--    音量-->
+    <RelativeLayout
+        android:id="@+id/carsetfragment_carset_layout_yinliang"
+        android:layout_width="1280dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginLeft="560dp"
+        android:background="@drawable/carset_layout_bur"
+        android:visibility="visible">
+        
+        <ImageView
+            android:id="@+id/yinlianglog"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="194dp"
+            android:layout_marginLeft="200dp"
+            android:src="@mipmap/yinlianglog50"/>
+
+        <TextView
+            android:layout_width="148dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="39dp"
+            android:text="音量"
+            android:textColor="#FFF"
+            android:textSize="36sp"/>
+        
+        <RadioGroup
+            android:id="@+id/volume"
+            android:layout_width="820dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="194dp"
+            android:layout_marginLeft="283dp"
+            android:orientation="horizontal"
+            android:background="@mipmap/yinliangbrun">
+
+            <RadioButton
+                android:id="@+id/volume0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_hubian"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/volume_10"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+            <RadioButton
+                android:id="@+id/volume_20"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+
+            <RadioButton
+                android:id="@+id/volume_30"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@color/tm"
+                android:button="@null" />
+            <RadioButton
+                android:id="@+id/volume_40"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+            <RadioButton
+                android:id="@+id/volume_50"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+            <RadioButton
+                android:id="@+id/volume_60"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+            <RadioButton
+                android:id="@+id/volume_70"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+            <RadioButton
+                android:id="@+id/volume_80"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+            <RadioButton
+                android:id="@+id/volume_90"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:background="@color/tm"/>
+        </RadioGroup>
+        <ImageView
+            android:id="@+id/yin"
+            android:layout_width="94dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="290dp"
+            android:layout_marginLeft="663dp"/>
+
+    </RelativeLayout>
+<!--后视镜-->
+    <RelativeLayout
+        android:id="@+id/carsetfragment_seat_layout_rearview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="560dp"
+        android:layout_marginTop="160dp"
+        android:background="@drawable/carset_layout_bur"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="148dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="39dp"
+            android:text="后视镜"
+            android:textColor="#FFF"
+            android:textSize="36sp" />
+
+        <TextView
+            android:layout_width="104dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="707dp"
+            android:layout_marginTop="276dp"
+            android:gravity="center"
+            android:text="后视镜选择"
+            android:textColor="#FFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="707dp"
+            android:layout_marginTop="331dp"
+            android:gravity="center"
+            android:text="左"
+            android:textColor="#FFF"
+            android:textSize="32sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="707dp"
+            android:layout_marginTop="392dp"
+            android:gravity="center"
+            android:text="右"
+            android:textColor="#FFF"
+            android:textSize="32sp" />
+
+        <LinearLayout
+            android:layout_width="543dp"
+            android:layout_height="72dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="204dp"
+            android:background="@drawable/caeset_h_z_d_brun"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+
+            <Button
+                android:id="@+id/hsjkai"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/carset_h_z_d_button"
+                android:text="打开"
+                android:textColor="#ffffff"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/hsjguan"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@color/tm"
+                android:text="关闭"
+                android:textColor="#ffffff"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <RadioGroup
+            android:id="@+id/zuoyouhsj"
+            android:layout_width="50dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="756dp"
+            android:layout_marginTop="337dp"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/zuohoushijing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+
+                />
+
+            <RadioButton
+                android:id="@+id/youhoushijing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="33dp"
+                android:gravity="center"
+
+                />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/jingshang"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="984dp"
+            android:layout_marginTop="32dp"
+            android:background="@mipmap/jingtop"
+            />
+
+        <Button
+            android:id="@+id/jingzuo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="834dp"
+            android:layout_marginTop="182dp"
+            android:background="@mipmap/jingleft"
+            />
+
+        <Button
+            android:id="@+id/jingxia"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="984dp"
+            android:layout_marginTop="332dp"
+            android:background="@mipmap/jingbutton"
+            />
+
+        <Button
+            android:id="@+id/jingyou"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="1134dp"
+            android:layout_marginTop="182dp"
+            android:background="@mipmap/jingrede"
+            />
+
+        <Button
+            android:id="@+id/jingshang1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="984dp"
+            android:layout_marginTop="32dp"
+            android:background="@mipmap/jingtop"
+
+            />
+
+        <Button
+            android:id="@+id/jingzuo1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="834dp"
+            android:layout_marginTop="182dp"
+            android:background="@mipmap/jingleft"
+            />
+
+        <Button
+            android:id="@+id/jingxia1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="984dp"
+            android:layout_marginTop="332dp"
+            android:background="@mipmap/jingbutton"
+            />
+
+        <Button
+            android:id="@+id/jingyou1"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="1134dp"
+            android:layout_marginTop="182dp"
+            android:background="@mipmap/jingrede"
+            />
+
+    </RelativeLayout>
+<!--座椅-->
+    <RelativeLayout
+        android:id="@+id/carsetfragment_lamplight_layout_seat"
+        android:layout_width="1280dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginLeft="560dp"
+        android:background="@drawable/carset_layout_bur"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="座椅"
+            android:textSize="32sp"
+            android:textColor="#fff"
+            android:layout_marginTop="39dp"
+            android:layout_marginLeft="80dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/seat"
+            android:layout_width="1120dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="204dp"
+            android:layout_marginLeft="80dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:orientation="horizontal"
+            android:background="@drawable/caeset_h_z_d_brun">
+
+
+            <Button
+                android:id="@+id/seat0"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="未选中"
+                android:textSize="24sp"
+                android:textColor="#fff"
+                android:background="@drawable/carset_h_z_d_button"/>
+            <Button
+                android:id="@+id/seat1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="记忆一"
+                android:textSize="24sp"
+                android:textColor="#fff"
+                android:background="@color/tm"/>
+            <Button
+                android:id="@+id/seat2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="记忆二"
+                android:textSize="24sp"
+                android:textColor="#fff"
+                android:background="@color/tm"/>
+
+            <Button
+                android:id="@+id/seat3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="记忆三"
+                android:textSize="24sp"
+                android:textColor="#fff"
+                android:background="@color/tm"/>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+<!--    灯光-->
+    <RelativeLayout
+        android:id="@+id/carsetfragment_lamplight_layout_lemp"
+        android:layout_width="1280dp"
+        android:layout_height="480dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginLeft="560dp"
+        android:background="@drawable/carset_layout_bur"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="560dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="114dp"
+            android:layout_marginLeft="80dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/caeset_h_z_d_brun">
+
+
+            <Button
+                android:id="@+id/waibu_kai"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="开启"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:background="@drawable/carset_h_z_d_button"/>
+            <Button
+                android:id="@+id/waibu_guan"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="关闭"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:background="@color/tm"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1120dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="312dp"
+            android:layout_marginLeft="80dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:background="@drawable/caeset_h_z_d_brun">
+
+
+            <Button
+                android:id="@+id/lamp1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/carset_h_z_d_button"
+                android:text="舒缓模式"
+                android:textColor="#fff"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/lamp2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="舒缓模式"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:background="@color/tm"/>
+            <Button
+                android:id="@+id/lamp3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="舒缓模式"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:background="@color/tm"/>
+
+            <Button
+                android:id="@+id/lamp4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="舒缓模式"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:background="@color/tm"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/button_volume"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@mipmap/yinliang"
+        android:layout_marginTop="160dp"
+        android:layout_marginLeft="280dp" />
+
+    <Button
+        android:id="@+id/button_rearview"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@mipmap/nohshijing"
+        android:layout_marginTop="248dp"
+        android:layout_marginLeft="280dp" />
+
+    <Button
+        android:id="@+id/button_seat"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@mipmap/zuoyiquanbi"
+        android:layout_marginTop="336dp"
+        android:layout_marginLeft="280dp" />
+
+    <Button
+        android:id="@+id/button_lamplight"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@mipmap/nodengguang"
+        android:layout_marginTop="424dp"
+        android:layout_marginLeft="280dp" />
+
+
+</RelativeLayout>
