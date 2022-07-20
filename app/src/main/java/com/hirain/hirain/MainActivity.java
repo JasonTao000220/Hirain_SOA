@@ -59,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
         viewPager=findViewById(R.id.viewpaget_main);
         radioGroup=findViewById(R.id.radiogroup_main);
 
-        fragmentList.add(new UserFragment());
         fragmentList.add(new FirstFragment());
         fragmentList.add(new CarsetFragment());
         fragmentList.add(new AlluseFragment());
+        fragmentList.add(new UserFragment());
+
         viewPager.setOffscreenPageLimit(3);
         //todo viewPager适配器
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -102,28 +103,28 @@ public class MainActivity extends AppCompatActivity {
                  switch (i){
                      case R.id.radio_1:
                          viewPager.setCurrentItem(0);
-                         r1.setBackgroundResource(R.mipmap.meno);
+                         r1.setBackgroundResource(R.mipmap.my);
                          r2.setBackgroundResource(R.mipmap.homeno);
                          r3.setBackgroundResource(R.mipmap.carsetno);
                          r4.setBackgroundResource(R.mipmap.viewno);
                          break;
                      case R.id.radio_2:
                          viewPager.setCurrentItem(1);
-                         r1.setBackgroundResource(R.mipmap.my);
+                         r1.setBackgroundResource(R.mipmap.meno);
                          r2.setBackgroundResource(R.mipmap.home);
                          r3.setBackgroundResource(R.mipmap.carsetno);
                          r4.setBackgroundResource(R.mipmap.viewno);
                          break;
                      case R.id.radio_3:
                          viewPager.setCurrentItem(2);
-                         r1.setBackgroundResource(R.mipmap.my);
+                         r1.setBackgroundResource(R.mipmap.meno);
                          r2.setBackgroundResource(R.mipmap.homeno);
                          r3.setBackgroundResource(R.mipmap.carset);
                          r4.setBackgroundResource(R.mipmap.viewno);
                          break;
                      case R.id.radio_4:
                          viewPager.setCurrentItem(3);
-                         r1.setBackgroundResource(R.mipmap.my);
+                         r1.setBackgroundResource(R.mipmap.meno);
                          r2.setBackgroundResource(R.mipmap.homeno);
                          r3.setBackgroundResource(R.mipmap.carsetno);
                          r4.setBackgroundResource(R.mipmap.view);

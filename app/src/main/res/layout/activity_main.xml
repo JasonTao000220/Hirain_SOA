@@ -51,7 +51,7 @@
             android:button="@null"
             android:layout_marginTop="56dp"
             android:layout_marginLeft="68dp"
-            android:background="@mipmap/meno"/>
+            android:background="@mipmap/my"/>
 
         <RadioButton
             android:id="@+id/radio_2"

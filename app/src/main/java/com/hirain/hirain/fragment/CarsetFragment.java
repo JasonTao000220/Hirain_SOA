@@ -1,5 +1,7 @@
 package com.hirain.hirain.fragment;
 
+import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.LocalSocket;
@@ -10,6 +12,7 @@ import androidx.annotation.BinderThread;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +23,10 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import com.hirain.hirain.MainActivity;
 import com.hirain.hirain.R;
 import com.hirain.hirain.flaterbuffers.hsj.ExtMirrorServicelnfo;
 
@@ -33,6 +38,7 @@ import static com.hirain.hirain.R.mipmap.hshijing;
 import static com.hirain.hirain.R.mipmap.nodengguang;
 import static com.hirain.hirain.R.mipmap.nohshijing;
 import static com.hirain.hirain.R.mipmap.yin00;
+import static com.hirain.hirain.R.mipmap.yin10;
 import static com.hirain.hirain.R.mipmap.yin100;
 import static com.hirain.hirain.R.mipmap.yin20;
 import static com.hirain.hirain.R.mipmap.yin30;
@@ -60,14 +66,15 @@ public class CarsetFragment extends Fragment {
     private AudioManager am;//音量调节器
     private ImageView yinlianglog;
     private RadioGroup volume,zuoyouhsj;
-    private RadioButton vb0,vb1,vb2,vb3,vb4,vb5,vb6,vb7,vb8,vb9;
+    private RadioButton vb0,vb1,vb2,vb3,vb4,vb5,vb6,vb7,vb8,vb9,vb10;
     private ImageView yin;
 
     //后视镜
     private Button jingshang,jingzuo,jingxia,jingyou;
-    private Button jingshang1,jingzuo1,jingxia1,jingyou1;
     private Button hsjkai,hsjguan;
     private RadioButton zuohsj,youhsj;
+    private int rearview_position;
+    private ImageView select_position;
 
     //座椅
     private LinearLayout seat;
@@ -92,7 +99,6 @@ public class CarsetFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
 
         //todo 切换按钮
         yinliang=getActivity().findViewById(R.id.button_volume);
@@ -121,14 +127,17 @@ public class CarsetFragment extends Fragment {
         vb7=getActivity().findViewById(R.id.volume_70);
         vb8=getActivity().findViewById(R.id.volume_80);
         vb9=getActivity().findViewById(R.id.volume_90);
+        vb10=getActivity().findViewById(R.id.volume_100);
 
         //todo 后视镜
         hsjkai=getActivity().findViewById(R.id.hsjkai);
         hsjguan=getActivity().findViewById(R.id.hsjguan);
+        select_position=getActivity().findViewById(R.id.checkedbar);
 
         //todo 左右后视镜切换
         zuohsj=getActivity().findViewById(R.id.zuohoushijing);
         youhsj=getActivity().findViewById(R.id.youhoushijing);
+        jingxia=getActivity().findViewById(R.id.jingxia);
 
         //todo 座椅记忆调节
         seat=getActivity().findViewById(R.id.seat);
@@ -233,11 +242,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_10:
-                        yin.setImageResource(yin20);
+                        yin.setImageResource(yin10);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,20,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,10,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb1.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -248,12 +258,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
-
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_20:
-                        yin.setImageResource(yin30);
+                        yin.setImageResource(yin20);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,30,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,20,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb2.setBackgroundResource(R.drawable.shape_hubian);
                         vb1.setBackgroundResource(R.color.tm);
@@ -264,11 +274,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_30:
-                        yin.setImageResource(yin40);
+                        yin.setImageResource(yin30);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,40,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,30,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb3.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -279,11 +290,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_40:
-                        yin.setImageResource(yin50);
+                        yin.setImageResource(yin40);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,50,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,40,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb4.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -294,11 +306,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_50:
-                        yin.setImageResource(yin60);
+                        yin.setImageResource(yin50);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,60,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,50,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb5.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -309,11 +322,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_60:
-                        yin.setImageResource(yin70);
+                        yin.setImageResource(yin60);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,70,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,60,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb6.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -324,11 +338,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_70:
-                        yin.setImageResource(yin80);
+                        yin.setImageResource(yin70);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,80,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,70,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb7.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -339,11 +354,12 @@ public class CarsetFragment extends Fragment {
                         vb1.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_80:
-                        yin.setImageResource(yin90);
+                        yin.setImageResource(yin80);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,90,0);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,80,0);
                         vb0.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -354,11 +370,12 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb1.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
                         break;
                     case R.id.volume_90:
-                        yin.setImageResource(yin100);
+                        yin.setImageResource(yin90);
                         yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,100,AudioManager.FLAG_SHOW_UI);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,90,AudioManager.FLAG_SHOW_UI);
                         vb0.setBackgroundResource(R.color.tm);
                         vb9.setBackgroundResource(R.drawable.shape_hubian);
                         vb2.setBackgroundResource(R.color.tm);
@@ -369,6 +386,23 @@ public class CarsetFragment extends Fragment {
                         vb7.setBackgroundResource(R.color.tm);
                         vb8.setBackgroundResource(R.color.tm);
                         vb1.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.color.tm);
+                        break;
+                    case R.id.volume_100:
+                        yin.setImageResource(yin100);
+                        yinlianglog.setImageResource(R.mipmap.yinlianglog100);
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC,100,AudioManager.FLAG_SHOW_UI);
+                        vb0.setBackgroundResource(R.color.tm);
+                        vb9.setBackgroundResource(R.color.tm);
+                        vb2.setBackgroundResource(R.color.tm);
+                        vb3.setBackgroundResource(R.color.tm);
+                        vb4.setBackgroundResource(R.color.tm);
+                        vb5.setBackgroundResource(R.color.tm);
+                        vb6.setBackgroundResource(R.color.tm);
+                        vb7.setBackgroundResource(R.color.tm);
+                        vb8.setBackgroundResource(R.color.tm);
+                        vb1.setBackgroundResource(R.color.tm);
+                        vb10.setBackgroundResource(R.drawable.shape_hubian);
                         break;
                 }
             }
@@ -379,17 +413,45 @@ public class CarsetFragment extends Fragment {
         hsjkai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hsjkai.setBackgroundResource(R.drawable.carset_h_z_d_button);
-                hsjguan.setBackgroundResource(R.color.tm);
+                ObjectAnimator rearviewoff=ObjectAnimator.ofFloat(select_position,"translationX",
+                        265,0);
+                rearviewoff.setDuration(100);
+                rearviewoff.start();
+
+                hsjguan.setEnabled(false);
+                hsjkai.setEnabled(false);
+                Handler handler=new Handler();
+                Runnable runnable=new Runnable() {
+                    @Override
+                    public void run() {
+                        hsjguan.setEnabled(true);
+                        hsjkai.setEnabled(true);
+                    }
+                };
+                handler.postDelayed(runnable,100);
+
             }
         });
         //关闭后视镜
         hsjguan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ObjectAnimator rearviewoff=ObjectAnimator.ofFloat(select_position,"translationX",
+                        0,265);
+                rearviewoff.setDuration(100);
+                rearviewoff.start();
 
-                hsjguan.setBackgroundResource(R.drawable.carset_h_z_d_button);
-                hsjkai.setBackgroundResource(R.color.tm);
+                hsjguan.setEnabled(false);
+                hsjkai.setEnabled(false);
+                Handler handler=new Handler();
+                Runnable runnable=new Runnable() {
+                    @Override
+                    public void run() {
+                        hsjguan.setEnabled(true);
+                        hsjkai.setEnabled(true);
+                    }
+                };
+                handler.postDelayed(runnable,100);
 
                 try {
                 int hsj1 =fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
@@ -428,34 +490,20 @@ public class CarsetFragment extends Fragment {
         });
 
         //Todo 调节左右后视镜
+        //rearview_position=1代表选择左后视镜 2代表选择右后视镜
         zuoyouhsj.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i){
                     case R.id.zuohoushijing:
-                        jingzuo.setBackgroundResource(R.mipmap.jingleft);
-                        jingshang.setBackgroundResource(R.mipmap.jingtop);
-                        jingyou.setBackgroundResource(R.mipmap.jingrede);
-                        jingxia.setBackgroundResource(R.mipmap.jingbutton);
-                        jingzuo1.setVisibility(View.GONE);
-                        jingshang1.setVisibility(View.GONE);
-                        jingyou1.setVisibility(View.GONE);
-                        jingxia1.setVisibility(View.GONE);
-                        break;
+                      rearview_position=1;
+                    break;
                     case R.id.youhoushijing:
-                        jingzuo.setVisibility(View.GONE);
-                        jingshang.setVisibility(View.GONE);
-                        jingyou.setVisibility(View.GONE);
-                        jingxia.setVisibility(View.GONE);
-                        jingzuo1.setBackgroundResource(R.mipmap.jingleft);
-                        jingshang1.setBackgroundResource(R.mipmap.jingtop);
-                        jingyou1.setBackgroundResource(R.mipmap.jingrede);
-                        jingxia1.setBackgroundResource(R.mipmap.jingbutton);
-                        break;
+                      rearview_position=2;
+                    break;
                 }
             }
         });
-
 
         //TODO 座椅调节
         //未调节

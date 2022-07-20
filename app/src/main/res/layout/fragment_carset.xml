@@ -6,23 +6,23 @@
     tools:context=".fragment.CarsetFragment">
 
 
-<!--    音量-->
+<!--音量-->
     <RelativeLayout
         android:id="@+id/carsetfragment_carset_layout_yinliang"
         android:layout_width="1280dp"
         android:layout_height="480dp"
-        android:layout_marginTop="160dp"
         android:layout_marginLeft="560dp"
+        android:layout_marginTop="160dp"
         android:background="@drawable/carset_layout_bur"
-        android:visibility="visible">
-        
+        android:visibility="gone">
+
         <ImageView
             android:id="@+id/yinlianglog"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="194dp"
             android:layout_marginLeft="200dp"
-            android:src="@mipmap/yinlianglog50"/>
+            android:layout_marginTop="194dp"
+            android:src="@mipmap/yinlianglog50" />
 
         <TextView
             android:layout_width="148dp"
@@ -31,16 +31,16 @@
             android:layout_marginTop="39dp"
             android:text="音量"
             android:textColor="#FFF"
-            android:textSize="36sp"/>
-        
+            android:textSize="32sp" />
+
         <RadioGroup
             android:id="@+id/volume"
             android:layout_width="820dp"
             android:layout_height="60dp"
-            android:layout_marginTop="194dp"
             android:layout_marginLeft="283dp"
-            android:orientation="horizontal"
-            android:background="@mipmap/yinliangbrun">
+            android:layout_marginTop="194dp"
+            android:background="@mipmap/yinliangbrun"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/volume0"
@@ -59,8 +59,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
+
             <RadioButton
                 android:id="@+id/volume_20"
                 android:layout_width="0dp"
@@ -68,8 +69,8 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
 
             <RadioButton
                 android:id="@+id/volume_30"
@@ -80,6 +81,7 @@
                 android:layout_weight="1"
                 android:background="@color/tm"
                 android:button="@null" />
+
             <RadioButton
                 android:id="@+id/volume_40"
                 android:layout_width="0dp"
@@ -87,8 +89,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
+
             <RadioButton
                 android:id="@+id/volume_50"
                 android:layout_width="0dp"
@@ -96,8 +99,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
+
             <RadioButton
                 android:id="@+id/volume_60"
                 android:layout_width="0dp"
@@ -105,8 +109,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
+
             <RadioButton
                 android:id="@+id/volume_70"
                 android:layout_width="0dp"
@@ -114,8 +119,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
+
             <RadioButton
                 android:id="@+id/volume_80"
                 android:layout_width="0dp"
@@ -123,8 +129,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
+
             <RadioButton
                 android:id="@+id/volume_90"
                 android:layout_width="0dp"
@@ -132,22 +139,34 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:button="@null"
-                android:background="@color/tm"/>
+                android:background="@color/tm"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/volume_100"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@color/tm"
+                android:button="@null" />
         </RadioGroup>
+
         <ImageView
             android:id="@+id/yin"
             android:layout_width="94dp"
             android:layout_height="35dp"
+            android:layout_marginLeft="650dp"
             android:layout_marginTop="290dp"
-            android:layout_marginLeft="663dp"/>
+            android:background="@mipmap/yin00" />
 
     </RelativeLayout>
 <!--后视镜-->
     <RelativeLayout
         android:id="@+id/carsetfragment_seat_layout_rearview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="1280dp"
+        android:layout_height="480dp"
         android:layout_marginLeft="560dp"
         android:layout_marginTop="160dp"
         android:background="@drawable/carset_layout_bur"
@@ -160,7 +179,7 @@
             android:layout_marginTop="39dp"
             android:text="后视镜"
             android:textColor="#FFF"
-            android:textSize="36sp" />
+            android:textSize="32sp" />
 
         <TextView
             android:layout_width="104dp"
@@ -209,10 +228,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/carset_h_z_d_button"
-                android:text="打开"
-                android:textColor="#ffffff"
-                android:textSize="24sp" />
+                android:background="@color/tm"/>
 
             <Button
                 android:id="@+id/hsjguan"
@@ -222,10 +238,35 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@color/tm"
-                android:text="关闭"
-                android:textColor="#ffffff"
-                android:textSize="24sp" />
+                />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/checkedbar"
+            android:layout_width="270dp"
+            android:layout_height="65dp"
+            android:background="@drawable/selectbar"
+            android:layout_marginLeft="83dp"
+            android:layout_marginTop="207.5dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="225dp"
+            android:layout_marginLeft="200dp"
+            android:text="打开"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="225dp"
+            android:layout_marginLeft="460dp"
+            android:text="关闭"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
         <RadioGroup
             android:id="@+id/zuoyouhsj"
@@ -240,7 +281,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-
+                android:checked="true"
                 />
 
             <RadioButton
@@ -260,7 +301,7 @@
             android:layout_height="120dp"
             android:layout_marginLeft="984dp"
             android:layout_marginTop="32dp"
-            android:background="@mipmap/jingtop"
+            android:background="@drawable/rearview_mirror_selectortop"
             />
 
         <Button
@@ -269,7 +310,7 @@
             android:layout_height="120dp"
             android:layout_marginLeft="834dp"
             android:layout_marginTop="182dp"
-            android:background="@mipmap/jingleft"
+            android:background="@drawable/rearview_mirror_selectorleft"
             />
 
         <Button
@@ -278,7 +319,7 @@
             android:layout_height="120dp"
             android:layout_marginLeft="984dp"
             android:layout_marginTop="332dp"
-            android:background="@mipmap/jingbutton"
+            android:background="@drawable/rearview_mirror_selectorbottom"
             />
 
         <Button
@@ -287,44 +328,7 @@
             android:layout_height="120dp"
             android:layout_marginLeft="1134dp"
             android:layout_marginTop="182dp"
-            android:background="@mipmap/jingrede"
-            />
-
-        <Button
-            android:id="@+id/jingshang1"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="984dp"
-            android:layout_marginTop="32dp"
-            android:background="@mipmap/jingtop"
-
-            />
-
-        <Button
-            android:id="@+id/jingzuo1"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="834dp"
-            android:layout_marginTop="182dp"
-            android:background="@mipmap/jingleft"
-            />
-
-        <Button
-            android:id="@+id/jingxia1"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="984dp"
-            android:layout_marginTop="332dp"
-            android:background="@mipmap/jingbutton"
-            />
-
-        <Button
-            android:id="@+id/jingyou1"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="1134dp"
-            android:layout_marginTop="182dp"
-            android:background="@mipmap/jingrede"
+            android:background="@drawable/rearview_mirror_selectorright"
             />
 
     </RelativeLayout>
@@ -409,7 +413,7 @@
 
         </LinearLayout>
     </RelativeLayout>
-<!--    灯光-->
+<!--灯光-->
     <RelativeLayout
         android:id="@+id/carsetfragment_lamplight_layout_lemp"
         android:layout_width="1280dp"
@@ -417,7 +421,25 @@
         android:layout_marginTop="160dp"
         android:layout_marginLeft="560dp"
         android:background="@drawable/carset_layout_bur"
-        android:visibility="gone">
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="148dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="39dp"
+            android:text="灯光"
+            android:textColor="#FFF"
+            android:textSize="32sp" />
+
+        <TextView
+            android:layout_width="148dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="240dp"
+            android:text="模式"
+            android:textColor="#FFF"
+            android:textSize="32sp" />
 
         <LinearLayout
             android:layout_width="560dp"
