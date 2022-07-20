@@ -3,6 +3,7 @@ package com.hirain.hirain;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -32,11 +33,17 @@ public class MainActivity extends AppCompatActivity {
     public RadioGroup radioGroup;
     private List<Fragment> fragmentList=new ArrayList<>();
     private RadioButton r1,r2,r3,r4;
+    public static List<Song> songList=new ArrayList<>();
+    public static List<Song> getSongList(){
+
+        return songList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initMusic();
         //todo 按钮
         tianjiaview=findViewById(R.id.firsttianjia);
         newview=findViewById(R.id.newview);
@@ -56,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentList.add(new FirstFragment());
         fragmentList.add(new CarsetFragment());
         fragmentList.add(new AlluseFragment());
-
+        viewPager.setOffscreenPageLimit(3);
         //todo viewPager适配器
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
@@ -126,6 +133,32 @@ public class MainActivity extends AppCompatActivity {
          });
     }
 
+
+    private void initMusic() {
+
+        Song song1 = new Song();
+        song1.setMusicPath(R.raw.aa);
+        song1.setSinger("解忧邵帅");
+        song1.setSong("你是人间四月天");
+        Song song2 = new Song();
+        song2.setMusicPath(R.raw.bb);
+        song2.setSinger("李荣浩");
+        song2.setSong("戒烟");
+        Song song3 = new Song();
+        song3.setMusicPath(R.raw.cc);
+        song3.setSinger("漆柚");
+        song3.setSong("封刀不为峥嵘");
+        Song song4 = new Song();
+        song4.setMusicPath(R.raw.dd);
+        song4.setSinger("王同学Able");
+        song4.setSong("什么是逍遥");
+
+
+        songList.add(song1);
+        songList.add(song2);
+        songList.add(song3);
+        songList.add(song4);
+    }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

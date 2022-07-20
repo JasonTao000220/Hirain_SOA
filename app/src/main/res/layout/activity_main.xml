@@ -8,9 +8,9 @@
     tools:context=".MainActivity">
 
 
-    <androidx.viewpager.widget.ViewPager
+    <com.hirain.hirain.myview.NoScrollViewPager
         android:id="@+id/viewpaget_main"
-        android:layout_width="1482dp"
+        android:layout_width="1920dp"
         android:layout_height="match_parent" />
     <TextView
         android:layout_width="200dp"
