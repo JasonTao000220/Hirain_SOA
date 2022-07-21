@@ -1,15 +1,9 @@
 package com.hirain.hirain.fragment;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -39,16 +33,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hirain.hirain.MainActivity;
-import com.hirain.hirain.MediaPlayerUtil;
 import com.hirain.hirain.MusicService;
 import com.hirain.hirain.R;
 import com.hirain.hirain.Song;
+import com.hirain.hirain.bean.event.EditModeEvent;
+import com.hirain.hirain.dialog.DialogUtils;
 import com.hirain.hirain.myview.Dialog;
 
-import java.io.IOException;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.MODE_PRIVATE;
@@ -227,6 +222,8 @@ public class FirstFragment extends Fragment {
 
                 musicName.setText(songList.get(MusicService.getPos()).getSong());
 
+                    bofang.setImageResource(R.mipmap.pause);
+
             }
         });
         //下一首
@@ -234,8 +231,9 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 binder.nextMusic();
-
                 musicName.setText(songList.get(MusicService.getPos()).getSong());
+
+                bofang.setImageResource(R.mipmap.pause);
 
             }
         });
@@ -398,22 +396,37 @@ public class FirstFragment extends Fragment {
         show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "正在启动展示模式", Toast.LENGTH_SHORT).show();
-                com.hirain.hirain.myview.Dialog dialog=new com.hirain.hirain.myview.Dialog(getActivity());
-                dialog.setTitle("提示");
-                dialog.setMessage("确认开启展示模式");
-                dialog.setCancel("取消", new Dialog.OnCancelListener() {
+
+                //跳转到第二个页面
+                EventBus.getDefault().post(new EditModeEvent("df",0));
+
+//                Toast.makeText(getActivity(), "正在启动展示模式", Toast.LENGTH_SHORT).show();
+             /*   DialogUtils.customView(getActivity(), R.string.start_model, R.string.dialog_cancle, R.string.dialg_start, new DialogUtils.onClickListener() {
                     @Override
-                    public void onCancel(Dialog dialog) {
+                    public void leftClickListener() {
 
                     }
-                });
-                dialog.setConfirm("确认", new Dialog.OnConfirmListener() {
-                    @Override
-                    public void onConfirm(Dialog dialog) {
 
+                    @Override
+                    public void rightClickListener(String text) {
+                        //开启
+                        Toast.makeText(getActivity(), "自定义模式已开启", Toast.LENGTH_SHORT).show();
                     }
                 });
+                DialogUtils.customEditView(getActivity(), R.string.set_model, R.string.dialog_cancle, R.string.dialg_confirm, new DialogUtils.onClickListener() {
+                    @Override
+                    public void leftClickListener() {
+
+                    }
+
+                    @Override
+                    public void rightClickListener(String text) {
+                        //开启
+                        Toast.makeText(getActivity(), "自定义模式已开启", Toast.LENGTH_SHORT).show();
+                    }
+                });
+*/
+
             }
         });
 

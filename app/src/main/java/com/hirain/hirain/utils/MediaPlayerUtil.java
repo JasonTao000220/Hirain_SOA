@@ -1,4 +1,4 @@
-package com.hirain.hirain;
+package com.hirain.hirain.utils;
 
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -15,6 +15,9 @@ import java.util.concurrent.Executors;
 
 
 public class MediaPlayerUtil {
+
+
+
 
         private static final String TAG = MediaPlayerUtil.class.getSimpleName();
 

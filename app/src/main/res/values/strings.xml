@@ -2,4 +2,11 @@
     <string name="app_name">Hirain</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="start_model">是否启动当前模式</string>
+    <string name="dialog_cancle">取消</string>
+    <string name="dialg_start">开启</string>
+    <string name="set_model">设置新模式名称</string>
+    <string name="dialg_confirm">确认</string>
+    <string name="save_mode">确认存为新模式吗</string>
+    <string name="edit_mode_tip">是否保存此次编辑</string>
 </resources>

@@ -78,8 +78,6 @@ public class Dialog extends android.app.Dialog implements View.OnClickListener {
 
 //        textView1 = (TextView) findViewById(R.id.tv1);
         textView2 = (TextView) findViewById(R.id.tv2);
-        textView3 = (TextView) findViewById(R.id.tv3);
-        textView4 = (TextView) findViewById(R.id.tv4);
 //        if (!TextUtils.isEmpty(title)) {//不为空
 //            textView1.setText(title);
 //        }
@@ -100,18 +98,7 @@ public class Dialog extends android.app.Dialog implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv3:
-                if (cancelListener != null) {
-                    cancelListener.onCancel(this);
-                }
-                dismiss();
-                break;
-            case R.id.tv4:
-                if (confirmListener != null) {
-                    confirmListener.onConfirm(this);
-                }
-                dismiss();
-                break;
+
         }
     }
 

@@ -3,16 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.CarsetFragment">
+    <!-- 另存新模式   保存  -->
+    <TextView
+        android:id="@+id/save_new_mode"
+        android:layout_alignParentRight="true"
+        android:layout_width="184dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/shape_save_mode_10"
+        android:text="另存新模式"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        />
 
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/update_mode"
+        android:layout_toLeftOf="@id/save_new_mode"
+        android:layout_width="124dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/shape_update_mode_10"
+        android:text="保存"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        />
 
 <!--音量-->
     <RelativeLayout
         android:id="@+id/carsetfragment_carset_layout_yinliang"
-        android:layout_width="1280dp"
-        android:layout_height="480dp"
-        android:layout_marginLeft="560dp"
-        android:layout_marginTop="160dp"
+        android:layout_width="1320dp"
+        android:layout_height="500dp"
+        android:layout_below="@id/save_new_mode"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/carset_layout_bur"
         android:visibility="gone">
 
@@ -165,110 +196,80 @@
 <!--后视镜-->
     <RelativeLayout
         android:id="@+id/carsetfragment_seat_layout_rearview"
-        android:layout_width="1280dp"
-        android:layout_height="480dp"
-        android:layout_marginLeft="560dp"
-        android:layout_marginTop="160dp"
+        android:layout_width="1320dp"
+        android:layout_height="500dp"
+        android:layout_below="@id/save_new_mode"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/carset_layout_bur"
         android:visibility="gone">
 
+
         <TextView
-            android:layout_width="148dp"
-            android:layout_height="50dp"
+            android:id="@+id/rm_type_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="80dp"
-            android:layout_marginTop="39dp"
+            android:layout_marginTop="40dp"
             android:text="后视镜"
             android:textColor="#FFF"
             android:textSize="32sp" />
 
+
+        <com.flyco.tablayout.SegmentTabLayout
+            android:layout_below="@id/rm_type_tv"
+            android:id="@+id/rm_type"
+            android:layout_width="543dp"
+            android:layout_height="72dp"
+            android:layout_marginLeft="104dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/caeset_h_z_d_brun"
+            android:padding="4dp"
+            tl:tl_textsize="24sp"
+            android:layout_gravity="center_horizontal"
+            tl:tl_bar_stroke_width="0dp"
+            tl:tl_indicator_color="@color/dialog_start_bg"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/white"
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="true"
+            tl:tl_tab_space_equal="true"/>
+
+
         <TextView
-            android:layout_width="104dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="707dp"
-            android:layout_marginTop="276dp"
+            android:id="@+id/rm_direction_tv"
+            android:layout_below="@id/rm_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="82dp"
             android:gravity="center"
             android:text="后视镜选择"
             android:textColor="#FFF"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="707dp"
-            android:layout_marginTop="331dp"
-            android:gravity="center"
-            android:text="左"
-            android:textColor="#FFF"
             android:textSize="32sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="707dp"
-            android:layout_marginTop="392dp"
-            android:gravity="center"
-            android:text="右"
-            android:textColor="#FFF"
-            android:textSize="32sp" />
-
-        <LinearLayout
+        <com.flyco.tablayout.SegmentTabLayout
+            android:layout_below="@id/rm_direction_tv"
+            android:id="@+id/rm_direction"
             android:layout_width="543dp"
             android:layout_height="72dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="204dp"
+            android:layout_marginLeft="104dp"
+            android:layout_marginTop="22dp"
             android:background="@drawable/caeset_h_z_d_brun"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-
-            <Button
-                android:id="@+id/hsjkai"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@color/tm"/>
-
-            <Button
-                android:id="@+id/hsjguan"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@color/tm"
-                />
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/checkedbar"
-            android:layout_width="270dp"
-            android:layout_height="65dp"
-            android:background="@drawable/selectbar"
-            android:layout_marginLeft="83dp"
-            android:layout_marginTop="207.5dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="225dp"
-            android:layout_marginLeft="200dp"
-            android:text="打开"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="225dp"
-            android:layout_marginLeft="460dp"
-            android:text="关闭"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:padding="4dp"
+            tl:tl_textsize="24sp"
+            android:layout_gravity="center_horizontal"
+            tl:tl_bar_stroke_width="0dp"
+            tl:tl_indicator_color="@color/dialog_start_bg"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/white"
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="true"
+            tl:tl_tab_space_equal="true"/>
 
         <RadioGroup
+            android:visibility="gone"
             android:id="@+id/zuoyouhsj"
             android:layout_width="50dp"
             android:layout_height="100dp"
@@ -295,39 +296,59 @@
 
         </RadioGroup>
 
+        <TextView
+            android:id="@+id/rm_adjust_tv"
+            android:layout_toRightOf="@id/rm_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="106dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:text="镜面角度调节"
+            android:textColor="#FFF"
+            android:textSize="32sp" />
+
         <Button
+            android:layout_toRightOf="@id/rm_adjust_tv"
+            android:layout_below="@id/rm_adjust_tv"
             android:id="@+id/jingshang"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="984dp"
-            android:layout_marginTop="32dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="28dp"
             android:background="@drawable/rearview_mirror_selectortop"
             />
 
         <Button
+            android:layout_below="@id/jingshang"
+            android:layout_toLeftOf="@id/jingshang"
             android:id="@+id/jingzuo"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="834dp"
-            android:layout_marginTop="182dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/rearview_mirror_selectorleft"
             />
 
         <Button
+            android:layout_toRightOf="@id/rm_adjust_tv"
+            android:layout_below="@id/jingshang"
             android:id="@+id/jingxia"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="984dp"
-            android:layout_marginTop="332dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="121dp"
             android:background="@drawable/rearview_mirror_selectorbottom"
             />
 
         <Button
+            android:layout_toRightOf="@id/jingshang"
+            android:layout_below="@id/jingshang"
             android:id="@+id/jingyou"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="1134dp"
-            android:layout_marginTop="182dp"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/rearview_mirror_selectorright"
             />
 
@@ -335,10 +356,12 @@
 <!--座椅-->
     <RelativeLayout
         android:id="@+id/carsetfragment_lamplight_layout_seat"
-        android:layout_width="1280dp"
-        android:layout_height="480dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginLeft="560dp"
+        android:layout_width="1320dp"
+        android:layout_height="500dp"
+        android:layout_below="@id/save_new_mode"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/carset_layout_bur"
         android:visibility="gone">
 
@@ -351,189 +374,102 @@
             android:layout_marginTop="39dp"
             android:layout_marginLeft="80dp"
             />
-
-        <LinearLayout
-            android:id="@+id/seat"
-            android:layout_width="1120dp"
+        <com.flyco.tablayout.SegmentTabLayout
+            android:id="@+id/chair_type"
+            android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:layout_marginTop="204dp"
-            android:layout_marginLeft="80dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:orientation="horizontal"
-            android:background="@drawable/caeset_h_z_d_brun">
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:background="@drawable/caeset_h_z_d_brun"
+            android:padding="4dp"
+            tl:tl_textsize="24sp"
+            android:layout_centerInParent="true"
+            tl:tl_bar_stroke_width="0dp"
+            tl:tl_indicator_color="@color/dialog_start_bg"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/white"
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="true"
+            tl:tl_tab_space_equal="true"/>
 
-
-            <Button
-                android:id="@+id/seat0"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="未选中"
-                android:textSize="24sp"
-                android:textColor="#fff"
-                android:background="@drawable/carset_h_z_d_button"/>
-            <Button
-                android:id="@+id/seat1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="记忆一"
-                android:textSize="24sp"
-                android:textColor="#fff"
-                android:background="@color/tm"/>
-            <Button
-                android:id="@+id/seat2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="记忆二"
-                android:textSize="24sp"
-                android:textColor="#fff"
-                android:background="@color/tm"/>
-
-            <Button
-                android:id="@+id/seat3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="记忆三"
-                android:textSize="24sp"
-                android:textColor="#fff"
-                android:background="@color/tm"/>
-
-
-        </LinearLayout>
     </RelativeLayout>
 <!--灯光-->
     <RelativeLayout
         android:id="@+id/carsetfragment_lamplight_layout_lemp"
-        android:layout_width="1280dp"
-        android:layout_height="480dp"
-        android:layout_marginTop="160dp"
-        android:layout_marginLeft="560dp"
+        android:layout_width="1320dp"
+        android:layout_height="500dp"
+        android:layout_below="@id/save_new_mode"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="40dp"
+
         android:background="@drawable/carset_layout_bur"
         android:visibility="visible">
 
         <TextView
+            android:id="@+id/light_tv"
             android:layout_width="148dp"
             android:layout_height="50dp"
             android:layout_marginLeft="80dp"
-            android:layout_marginTop="39dp"
+            android:layout_marginTop="40dp"
             android:text="灯光"
             android:textColor="#FFF"
             android:textSize="32sp" />
 
+
+
+        <com.flyco.tablayout.SegmentTabLayout
+            android:layout_below="@id/light_tv"
+            android:id="@+id/light_type"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginTop="26dp"
+            android:background="@drawable/caeset_h_z_d_brun"
+            android:padding="4dp"
+            tl:tl_textsize="24sp"
+            android:layout_gravity="center_horizontal"
+            tl:tl_bar_stroke_width="0dp"
+            tl:tl_indicator_color="@color/dialog_start_bg"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/white"
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="true"
+            tl:tl_tab_space_equal="true"/>
+
+
         <TextView
-            android:layout_width="148dp"
+            android:layout_below="@id/light_type"
+
+            android:id="@+id/atmosphere_lamp_tv"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginLeft="80dp"
-            android:layout_marginTop="240dp"
-            android:text="模式"
+            android:layout_marginTop="80dp"
+            android:text="氛围灯模式"
             android:textColor="#FFF"
             android:textSize="32sp" />
 
-        <LinearLayout
-            android:layout_width="560dp"
+        <com.flyco.tablayout.SegmentTabLayout
+            android:layout_below="@id/atmosphere_lamp_tv"
+            android:id="@+id/atmosphere_lamp"
+            android:layout_width="match_parent"
             android:layout_height="72dp"
-            android:layout_marginTop="114dp"
-            android:layout_marginLeft="80dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:background="@drawable/caeset_h_z_d_brun">
-
-
-            <Button
-                android:id="@+id/waibu_kai"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="开启"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                android:background="@drawable/carset_h_z_d_button"/>
-            <Button
-                android:id="@+id/waibu_guan"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="关闭"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                android:background="@color/tm"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="1120dp"
-            android:layout_height="72dp"
-            android:layout_marginTop="312dp"
-            android:layout_marginLeft="80dp"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:background="@drawable/caeset_h_z_d_brun">
-
-
-            <Button
-                android:id="@+id/lamp1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/carset_h_z_d_button"
-                android:text="舒缓模式"
-                android:textColor="#fff"
-                android:textSize="24sp" />
-
-            <Button
-                android:id="@+id/lamp2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="舒缓模式"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                android:background="@color/tm"/>
-            <Button
-                android:id="@+id/lamp3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="舒缓模式"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                android:background="@color/tm"/>
-
-            <Button
-                android:id="@+id/lamp4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="舒缓模式"
-                android:textColor="#fff"
-                android:textSize="24sp"
-                android:background="@color/tm"/>
-
-        </LinearLayout>
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginTop="26dp"
+            android:background="@drawable/caeset_h_z_d_brun"
+            android:padding="4dp"
+            tl:tl_textsize="24sp"
+            android:layout_gravity="center_horizontal"
+            tl:tl_bar_stroke_width="0dp"
+            tl:tl_indicator_color="@color/dialog_start_bg"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/white"
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="true"
+            tl:tl_tab_space_equal="true"/>
 
     </RelativeLayout>
 
@@ -543,7 +479,7 @@
         android:layout_height="82dp"
         android:background="@mipmap/yinliang"
         android:layout_marginTop="160dp"
-        android:layout_marginLeft="280dp" />
+        android:layout_marginLeft="260dp" />
 
     <Button
         android:id="@+id/button_rearview"
@@ -551,7 +487,7 @@
         android:layout_height="82dp"
         android:background="@mipmap/nohshijing"
         android:layout_marginTop="248dp"
-        android:layout_marginLeft="280dp" />
+        android:layout_marginLeft="260dp" />
 
     <Button
         android:id="@+id/button_seat"
@@ -559,7 +495,7 @@
         android:layout_height="82dp"
         android:background="@mipmap/zuoyiquanbi"
         android:layout_marginTop="336dp"
-        android:layout_marginLeft="280dp" />
+        android:layout_marginLeft="260dp" />
 
     <Button
         android:id="@+id/button_lamplight"
@@ -567,7 +503,10 @@
         android:layout_height="82dp"
         android:background="@mipmap/nodengguang"
         android:layout_marginTop="424dp"
-        android:layout_marginLeft="280dp" />
+        android:layout_marginLeft="260dp" />
+
+
+
 
 
 </RelativeLayout>

@@ -5,5 +5,10 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="tm">#00FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="dialog_bg">#2A2846</color>
+    <color name="dialog_start_bg">#CC8FD8F6</color>
+    <color name="dialog_cancle_bg">#4B4868</color>
+    <color name="white_25">#40ffffff</color>
+    <color name="black_20">#33000000</color>
 
 </resources>

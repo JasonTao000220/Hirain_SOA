@@ -7,7 +7,17 @@
     android:background="@mipmap/mainbrind"
     tools:context=".MainActivity">
 
+    <TextView
+        android:visibility="gone"
+        android:layout_marginTop="15dp"
+        android:id="@+id/system_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="#fff"
+        android:textSize="32sp"
 
+        />
     <com.hirain.hirain.myview.NoScrollViewPager
         android:id="@+id/viewpaget_main"
         android:layout_width="1920dp"
