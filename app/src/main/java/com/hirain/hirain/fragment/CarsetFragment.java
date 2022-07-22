@@ -44,6 +44,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Random;
@@ -71,6 +72,7 @@ public class CarsetFragment extends Fragment {
     //交互
     private FlatBufferBuilder fbb =new FlatBufferBuilder();
     private LocalSocket msocket = new LocalSocket();
+
     //切换按钮
     private Button yinliang,hoshijing,zuoyi,dengguang;
 
@@ -89,12 +91,6 @@ public class CarsetFragment extends Fragment {
     private RadioButton zuohsj,youhsj;
     private int rearview_position;
     private ImageView select_position;
-
-
-
-
-
-
     //后视镜状态
     private String[] rmType = {"打开", "折叠"};
     //左右后视镜
@@ -145,6 +141,7 @@ public class CarsetFragment extends Fragment {
                     break;
                 case 1:
                     //保存编辑
+                    Log.i("wcu", "getMessage: "+customMode);
                     MMkvUtils.getmInstance().encodeParcelable(modeName,customMode);
                     break;
                 case 2:
@@ -180,6 +177,7 @@ public class CarsetFragment extends Fragment {
             chairTypeTab.setCurrentTab(customMode.getChairMode());
             rmTypeTab.setCurrentTab(customMode.getRmType());
             rmDirectionTab.setCurrentTab(customMode.getRmStates());
+            Log.i("wxy", "configMode: "+customMode.getRmType()+"==="+customMode.getRmStates());
             switchVolume(customMode.getVolume());
         }
     }
@@ -240,6 +238,7 @@ public class CarsetFragment extends Fragment {
         rmDirectionTab.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
+                Log.i("wxy", "onTabSelect: "+position);
                 customMode.setRmStates(position);
             }
 
@@ -253,6 +252,7 @@ public class CarsetFragment extends Fragment {
             @Override
             public void onTabSelect(int position) {
                 rearview_position=position+1;
+                Log.i("wxy", "onTabSelect: "+position);
                 customMode.setRmType(position);
             }
 
@@ -324,6 +324,7 @@ public class CarsetFragment extends Fragment {
                                 MMkvUtils.getmInstance().encodeSet(MMkvUtils.MODE,mode);
 
                                 MMkvUtils.getmInstance().encodeParcelable(text,customMode);
+                                EventBus.getDefault().post(new EditModeEvent(text,3));
                             }
                         });
 

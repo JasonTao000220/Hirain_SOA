@@ -11,7 +11,9 @@ import androidx.annotation.Nullable;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
@@ -32,25 +34,33 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hirain.hirain.MainActivity;
-import com.hirain.hirain.MusicService;
+import com.hirain.hirain.bean.ModelItem;
+import com.hirain.hirain.bean.UdpBean;
+import com.hirain.hirain.service.MusicService;
 import com.hirain.hirain.MyAdapter;
 import com.hirain.hirain.R;
 import com.hirain.hirain.Song;
 import com.hirain.hirain.bean.event.EditModeEvent;
-import com.hirain.hirain.dialog.DialogUtils;
-import com.hirain.hirain.myview.Dialog;
+import com.hirain.hirain.utils.MMkvUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.MODE_PRIVATE;
 import static com.hirain.hirain.R.mipmap.ic_launcher_round;
+import static com.hirain.hirain.R.mipmap.my;
+import static com.hirain.hirain.R.mipmap.nodengguang;
+import static com.hirain.hirain.R.mipmap.nohshijing;
+import static com.hirain.hirain.R.mipmap.zuoyiquanbi;
 
 public class FirstFragment extends Fragment {
     //todo 模式按钮
@@ -140,6 +150,7 @@ public class FirstFragment extends Fragment {
     private TextView musicName;
     private TextView musicProgress;
     private TextView musicDuration;
+    private MyAdapter myAdapter;
 
     private void updateProgress() {
         // 使用Handler每间隔1s发送一次空消息，通知进度条更新
@@ -156,33 +167,56 @@ public class FirstFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_first, container, false);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getMessage(Object event){
+        if(event instanceof EditModeEvent){
+            EditModeEvent editModeEvent= (EditModeEvent) event;
 
+            switch (editModeEvent.getEditState()) {
+                case 0:
+
+                    break;
+                case 1:
+
+                    break;
+                case 2:
+                    //取消编辑
+
+                    break;
+                case 3:
+                    //保存编辑更新自定义模式的列表
+                    Set<String> strings = MMkvUtils.getmInstance().decodeSet(MMkvUtils.MODE);
+                    ArrayList<ModelItem> data = new ArrayList<>();
+
+                    for (String str : strings) {
+                        ModelItem modelItem = new ModelItem();
+                        modelItem.setModeName(str);
+                        data.add(modelItem);
+                    }
+                    myAdapter.mList.clear();
+                    myAdapter.mList.addAll(data);
+                    myAdapter.notifyDataSetChanged();
+                    break;
+
+            }
+
+        }
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //进度条
+
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
         Intent intent=new Intent(getActivity(), MusicService.class);
         getActivity().bindService(intent,connection,BIND_AUTO_CREATE);
         songList= MainActivity.getSongList();
         initView();
-        ArrayList<Bean> data = new ArrayList<>();
 
-        Bean bean1 = new Bean("自定义模式1",R.mipmap.viewset);
-        Bean bean2 = new Bean("自定义模式2",R.mipmap.viewset);
-        Bean bean3 = new Bean("自定义模式3",R.mipmap.viewset);
-        Bean bean4 = new Bean("自定义模式4",R.mipmap.viewset);
-        Bean bean5 = new Bean("自定义模式5",R.mipmap.viewset);
-        data.add(bean1);
-        data.add(bean2);
-        data.add(bean3);
-        data.add(bean4);
-        data.add(bean5);
+        initCustomMode();
 
-        recyclerView = getActivity().findViewById(R.id.my_re_view);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
-                DividerItemDecoration.VERTICAL));
-        MyAdapter myAdapter = new MyAdapter(data);
-        recyclerView.setAdapter(myAdapter);
 
         //获取本地音乐
 //        initMusic();
@@ -195,7 +229,56 @@ public class FirstFragment extends Fragment {
         animation.setInterpolator(new LinearInterpolator());//匀速运动插值器
     }
 
+    private void initCustomMode() {
+
+        //从本地获取
+        Set<String> strings = MMkvUtils.getmInstance().decodeSet(MMkvUtils.MODE);
+
+        ArrayList<ModelItem> data = new ArrayList<>();
+
+        for (String str : strings) {
+            ModelItem modelItem = new ModelItem();
+            modelItem.setModeName(str);
+            data.add(modelItem);
+        }
+
+
+        recyclerView = getActivity().findViewById(R.id.my_re_view);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myAdapter = new MyAdapter(data);
+        recyclerView.setAdapter(myAdapter);
+    }
+
     private void initClick() {
+        tianjia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {//需要做个判断，判断是否超过多少多少条
+                //添加新模式  ，跳转到第二个页面
+                MainActivity activity = (MainActivity) getActivity();
+                activity.selectMenu(R.id.radio_2);
+            }
+        });
+
+        myAdapter.setOnMenuItemListenter(new MyAdapter.OnMenuItemClickListener() {
+            @Override
+            public void editClick(int position) {
+                //编辑跳转到 第二个页面
+
+                //跳转到第二个页面
+                EventBus.getDefault().post(new EditModeEvent(myAdapter.mList.get(position).getModeName(),0));
+            }
+
+            @Override
+            public void delClick(int position) {
+                //删除本地存储的自定义模式
+                String modeName = myAdapter.mList.get(position).getModeName();
+                Set<String> strings = MMkvUtils.getmInstance().decodeSet(MMkvUtils.MODE);
+                strings.remove(modeName);
+                MMkvUtils.getmInstance().encodeSet(MMkvUtils.MODE,strings);
+            }
+        });
 
         //进度条的拖动联动音乐的播放进度
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -332,13 +415,9 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //自定义条目
-                viewset1.setVisibility(View.VISIBLE);
-                viewset2.setVisibility(View.VISIBLE);
-                viewset3.setVisibility(View.VISIBLE);
-                viewset4.setVisibility(View.VISIBLE);
-                viewset5.setVisibility(View.VISIBLE);
+
                 //设置按钮
-                shezhi1.setVisibility(View.GONE);
+               /* shezhi1.setVisibility(View.GONE);
                 shezhi2.setVisibility(View.GONE);
                 shezhi3.setVisibility(View.GONE);
                 shezhi4.setVisibility(View.GONE);
@@ -348,7 +427,7 @@ public class FirstFragment extends Fragment {
                 shancu2.setVisibility(View.GONE);
                 shancu3.setVisibility(View.GONE);
                 shancu4.setVisibility(View.GONE);
-                shancu5.setVisibility(View.GONE);
+                shancu5.setVisibility(View.GONE);*/
             }
         });
 
@@ -358,18 +437,18 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(popupWindow==null){
-                    popupWindow = new PopupWindow(getContext());
-                    popupWindow.setBackgroundDrawable(null);
-                    View inflate = LayoutInflater.from(getContext()).inflate(R.layout.dialog, null, false);
-//                    inflate.findViewById()
-                    popupWindow.setContentView(inflate);
-                    popupWindow.setHeight(1920);
-                    popupWindow.setWidth(720);
-                }
-
-
-                popupWindow.showAtLocation(musis, Gravity.NO_GRAVITY,0,0);
+//                if(popupWindow==null){
+//                    popupWindow = new PopupWindow(getContext());
+//                    popupWindow.setBackgroundDrawable(null);
+//                    View inflate = LayoutInflater.from(getContext()).inflate(R.layout.dialog, null, false);
+////                    inflate.findViewById()
+//                    popupWindow.setContentView(inflate);
+//                    popupWindow.setHeight(1920);
+//                    popupWindow.setWidth(720);
+//                }
+//
+//
+//                popupWindow.showAtLocation(musis, Gravity.NO_GRAVITY,0,0);
 
 //                com.hirain.hirain.myview.Dialog dialog=new com.hirain.hirain.myview.Dialog(getActivity());
 ////                dialog.setTitle("");
@@ -397,8 +476,6 @@ public class FirstFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                //跳转到第二个页面
-                EventBus.getDefault().post(new EditModeEvent("df",0));
 
 //                Toast.makeText(getActivity(), "正在启动展示模式", Toast.LENGTH_SHORT).show();
              /*   DialogUtils.customView(getActivity(), R.string.start_model, R.string.dialog_cancle, R.string.dialg_start, new DialogUtils.onClickListener() {
@@ -430,13 +507,6 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        tianjia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {//需要做个判断，判断是否超过多少多少条
-
-
-            }
-        });
 
 
     }

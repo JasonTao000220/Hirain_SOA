@@ -1,4 +1,4 @@
-package com.hirain.hirain;
+package com.hirain.hirain.service;
 
 
 import android.app.Service;
@@ -8,6 +8,9 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+
+import com.hirain.hirain.MainActivity;
+import com.hirain.hirain.Song;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -190,7 +193,7 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         mediaPlayer=new MediaPlayer();
-        songList=MainActivity.getSongList();
+        songList= MainActivity.getSongList();
 //        //音乐暂时写死，内存里没有
 //        mediaPlayer.reset();
 //        try {

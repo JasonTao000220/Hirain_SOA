@@ -6,56 +6,87 @@
     tools:context=".fragment.FirstFragment"
     android:id="@+id/firstfragme">
 
-    <ImageView
+
+    <RelativeLayout
         android:layout_width="480dp"
         android:layout_height="600dp"
-        android:background="@mipmap/main_modelcardbackground"
+        android:background="@drawable/shape_first_bg_16"
         android:layout_marginTop="60dp"
-        android:layout_marginLeft="290dp"
-        />
+        android:layout_marginLeft="290dp">
 
-    <Button
-        android:id="@+id/musisbutton"
-        android:layout_width="420dp"
-        android:layout_height="80dp"
-        android:layout_marginLeft="322dp"
-        android:layout_marginTop="100dp"
-        android:background="@mipmap/main_musicmodelcard"
-     />
+        <TextView
+            android:id="@+id/sys_model_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="系统模式"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/white_50"
+            android:textSize="16sp"
+            />
 
-    <Button
-        android:id="@+id/showbutton"
-        android:layout_width="420dp"
-        android:layout_height="80dp"
-        android:layout_marginLeft="322dp"
-        android:layout_marginTop="188dp"
-        android:background="@mipmap/main_showmodelcard"
-    />
+        <Button
+            android:layout_below="@id/sys_model_tv"
+            android:id="@+id/musisbutton"
+            android:layout_width="420dp"
+            android:layout_height="80dp"
+             android:layout_centerHorizontal="true"
+
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/main_musicmodelcard"
+            />
+
+        <Button
+            android:layout_below="@id/musisbutton"
+            android:id="@+id/showbutton"
+            android:layout_width="420dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/main_showmodelcard"
+            />
+        <TextView
+            android:layout_below="@id/showbutton"
+            android:id="@+id/custom_model_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="自定义模式"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white_50"
+            android:textSize="16sp"
+            />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_below="@id/custom_model_tv"
+                android:layout_marginTop="10dp"
+                android:layout_width="420dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/my_re_view"
+                android:paddingBottom="60dp"
+                />
+
+
+        <Button
+            android:id="@+id/firsttianjia"
+            android:layout_width="480dp"
+            android:layout_height="60dp"
+            android:text="+"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/shape_add_bottom_16"/>
+    </RelativeLayout>
+
+
+
 
     <!--                    //解决自定义模式层级过高问题-->
     <!--                    方案一：通过recaclerview-->
     <!--                    方案二：合并层级，背景图拼接为一个图片-->
-    <ScrollView
-        android:layout_width="420dp"
-        android:layout_height="296dp"
-        android:layout_marginLeft="322dp"
-        android:layout_marginTop="311dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="420dp"
-            android:layout_height="260dp"
-            android:id="@+id/my_re_view"
-            android:scrollbars="vertical"
-            />
-
-    </ScrollView>
-    <Button
-        android:id="@+id/firsttianjia"
-        android:layout_width="480dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="600dp"
-        android:layout_marginLeft="292dp"
-        android:background="@mipmap/tianjiafist"/>
 
     <RelativeLayout
         android:layout_width="500dp"

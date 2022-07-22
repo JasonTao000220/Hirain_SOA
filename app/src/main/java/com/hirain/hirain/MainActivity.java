@@ -53,10 +53,6 @@ public class MainActivity extends AppCompatActivity {
     public static List<Song> songList=new ArrayList<>();
     //系统时间
     private TextView systemTime;
-    private long timecurrentTimeMillis;
-    private long timeGetTime;
-    private long timeSeconds;
-    private long timeMillis;
     private Timer timer;
 
     public static List<Song> getSongList(){
@@ -81,15 +77,18 @@ public class MainActivity extends AppCompatActivity {
                     isEdit=true;
                     break;
                 case 1:
-
+                    isEdit=false;
                     viewPager.setCurrentItem(0);
                     r1.setBackgroundResource(R.mipmap.my);
                     r2.setBackgroundResource(R.mipmap.homeno);
                     r3.setBackgroundResource(R.mipmap.carsetno);
                     r4.setBackgroundResource(R.mipmap.viewno);
-                    isEdit=false;
+
                     break;
                 case 2:
+                    isEdit=false;
+                    break;
+                case 3:
                     isEdit=false;
                     break;
 
@@ -115,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         if(!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this);
         }
+
+
         initMusic();
         //todo 按钮
         tianjiaview=findViewById(R.id.firsttianjia);
