@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.IBinder;
@@ -34,6 +36,7 @@ import android.widget.Toast;
 
 import com.hirain.hirain.MainActivity;
 import com.hirain.hirain.MusicService;
+import com.hirain.hirain.MyAdapter;
 import com.hirain.hirain.R;
 import com.hirain.hirain.Song;
 import com.hirain.hirain.bean.event.EditModeEvent;
@@ -60,6 +63,7 @@ public class FirstFragment extends Fragment {
     private Button viewset1,viewset2,viewset3,viewset4,viewset5;
     private Button shezhi1,shezhi2,shezhi3,shezhi4,shezhi5;
     private Button shancu1,shancu2,shancu3,shancu4,shancu5;
+    private RecyclerView recyclerView;
 
 
     //todo 音乐卡片
@@ -161,7 +165,24 @@ public class FirstFragment extends Fragment {
         getActivity().bindService(intent,connection,BIND_AUTO_CREATE);
         songList= MainActivity.getSongList();
         initView();
+        ArrayList<Bean> data = new ArrayList<>();
 
+        Bean bean1 = new Bean("自定义模式1",R.mipmap.viewset);
+        Bean bean2 = new Bean("自定义模式2",R.mipmap.viewset);
+        Bean bean3 = new Bean("自定义模式3",R.mipmap.viewset);
+        Bean bean4 = new Bean("自定义模式4",R.mipmap.viewset);
+        Bean bean5 = new Bean("自定义模式5",R.mipmap.viewset);
+        data.add(bean1);
+        data.add(bean2);
+        data.add(bean3);
+        data.add(bean4);
+        data.add(bean5);
+
+        recyclerView = getActivity().findViewById(R.id.my_re_view);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL));
+        MyAdapter myAdapter = new MyAdapter(data);
+        recyclerView.setAdapter(myAdapter);
 
         //获取本地音乐
 //        initMusic();
@@ -250,31 +271,10 @@ public class FirstFragment extends Fragment {
         //自定义模式
         tianjia=getActivity().findViewById(R.id.firsttianjia);
         firstfrag=getActivity().findViewById(R.id.firstfragme);
-        view1=getActivity().findViewById(R.id.view1);
-        view2=getActivity().findViewById(R.id.view2);
-        view3=getActivity().findViewById(R.id.view3);
-        view4=getActivity().findViewById(R.id.view4);
-        view5=getActivity().findViewById(R.id.view5);
-        textView1=getActivity().findViewById(R.id.text1);
+
+
         textView2=getActivity().findViewById(R.id.text2);
-        textView3=getActivity().findViewById(R.id.text3);
-        textView4=getActivity().findViewById(R.id.text4);
-        textView5=getActivity().findViewById(R.id.text5);
-        viewset1=getActivity().findViewById(R.id.view1_set);
-        viewset2=getActivity().findViewById(R.id.view2_set);
-        viewset3=getActivity().findViewById(R.id.view3_set);
-        viewset4=getActivity().findViewById(R.id.view4_set);
-        viewset5=getActivity().findViewById(R.id.view5_set);
-        shezhi1=getActivity().findViewById(R.id.shezhi1);
-        shezhi2=getActivity().findViewById(R.id.shezhi2);
-        shezhi3=getActivity().findViewById(R.id.shezhi3);
-        shezhi4=getActivity().findViewById(R.id.shezhi4);
-        shezhi5=getActivity().findViewById(R.id.shezhi5);
-        shancu1=getActivity().findViewById(R.id.shanchu1);
-        shancu2=getActivity().findViewById(R.id.shanchu2);
-        shancu3=getActivity().findViewById(R.id.shanchu3);
-        shancu4=getActivity().findViewById(R.id.shanchu4);
-        shancu5=getActivity().findViewById(R.id.shanchu5);
+
 
         //音乐卡片
         listbanner =new ArrayList<>();//mv图片
@@ -437,161 +437,6 @@ public class FirstFragment extends Fragment {
 
             }
         });
-
-        //todo 自定义模式1
-        view1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        viewset1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewset1.setVisibility(View.GONE);
-                shezhi1.setVisibility(View.VISIBLE);
-                shancu1.setVisibility(View.VISIBLE);
-            }
-        });
-        shezhi1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        shancu1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        //todo 自定义模式2
-        view2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        viewset2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewset2.setVisibility(View.GONE);
-                shezhi2.setVisibility(View.VISIBLE);
-                shancu2.setVisibility(View.VISIBLE);
-
-            }
-        });
-        shezhi2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        shancu2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        //todo 自定义模式3
-        view3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        viewset3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewset3.setVisibility(View.GONE);
-                shezhi3.setVisibility(View.VISIBLE);
-                shancu3.setVisibility(View.VISIBLE);
-
-            }
-        });
-        shezhi3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        shancu3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        //todo 自定义模式4
-        view4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        viewset4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewset4.setVisibility(View.GONE);
-                shezhi4.setVisibility(View.VISIBLE);
-                shancu4.setVisibility(View.VISIBLE);
-
-            }
-        });
-        shezhi4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        shancu4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        //todo 自定义模式5
-        view5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//
-//                //todo 动画效果测试
-//                ObjectAnimator  aAnimator= ObjectAnimator.ofFloat(view5,"rotation",0f,30f,0f);
-//                aAnimator.setRepeatCount(3);
-//                ObjectAnimator bAnimator= ObjectAnimator.ofFloat(view5,"alpha",1f,0.5f,1f);
-//                bAnimator.setRepeatCount(3);
-//                   AnimatorSet animatorSet=new AnimatorSet();
-//                   animatorSet.playTogether(aAnimator,bAnimator);
-//                   animatorSet.start();
-            }
-        });
-        viewset5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewset5.setVisibility(View.GONE);
-                shezhi5.setVisibility(View.VISIBLE);
-                shancu5.setVisibility(View.VISIBLE);
-
-            }
-        });
-        shezhi5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        shancu5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        //todo 音乐卡片
-
-
 
 
     }

@@ -40,6 +40,8 @@ dependencies {
     implementation 'com.google.flatbuffers:flatbuffers-java:2.0.0'//flatbuffers
     implementation 'io.github.h07000223:flycoTabLayout:3.0.0'
 
+    //recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     //数据存储
     implementation 'com.tencent:mmkv:1.2.12'
     //eventBus 通信

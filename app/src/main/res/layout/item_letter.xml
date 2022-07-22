@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="420dp"
+    android:layout_height="80dp">
+
+    <TextView
+        android:id="@+id/modelname"
+        android:layout_width="146dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="84dp"
+        />
+
+    <ImageView
+        android:id="@+id/detailbutton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="75dp"
+        />
+
+</LinearLayout>

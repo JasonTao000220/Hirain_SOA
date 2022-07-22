@@ -6,16 +6,22 @@
     tools:context=".fragment.FirstFragment"
     android:id="@+id/firstfragme">
 
+    <ImageView
+        android:layout_width="480dp"
+        android:layout_height="600dp"
+        android:background="@mipmap/main_modelcardbackground"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="290dp"
+        />
+
     <Button
         android:id="@+id/musisbutton"
         android:layout_width="420dp"
         android:layout_height="80dp"
         android:layout_marginLeft="322dp"
         android:layout_marginTop="100dp"
-        android:text="音乐模式"
-        android:textColor="#A9A9A9"
-        android:background="@drawable/first_moshi_brun"
-        android:textSize="38sp" />
+        android:background="@mipmap/main_musicmodelcard"
+     />
 
     <Button
         android:id="@+id/showbutton"
@@ -23,10 +29,8 @@
         android:layout_height="80dp"
         android:layout_marginLeft="322dp"
         android:layout_marginTop="188dp"
-        android:textSize="38sp"
-        android:text="展示模式"
-        android:textColor="#A9A9A9"
-        android:background="@drawable/first_moshi_brun" />
+        android:background="@mipmap/main_showmodelcard"
+    />
 
     <!--                    //解决自定义模式层级过高问题-->
     <!--                    方案一：通过recaclerview-->
@@ -34,220 +38,16 @@
     <ScrollView
         android:layout_width="420dp"
         android:layout_height="296dp"
-        android:layout_marginTop="311dp"
-        android:layout_marginLeft="322dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <!--                自定义模式1-->
-            <RelativeLayout
-                android:id="@+id/view1"
-                android:layout_width="416dp"
-                android:layout_height="80dp"
-                android:background="@drawable/first_moshi_brun"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp">
-                <TextView
-                    android:id="@+id/text1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="自定义模式"
-                    android:textSize="24sp"
-                    android:textColor="#FFF"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="64dp"/>
-                <Button
-                    android:id="@+id/view1_set"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_marginLeft="333dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@mipmap/viewset"/>
-                <Button
-                    android:id="@+id/shezhi1"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:text="编译"
-                    android:layout_marginLeft="246dp"
-                    android:visibility="gone" />
-                <Button
-                    android:id="@+id/shanchu1"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="326dp"
-                    android:visibility="gone"
-                    android:text="删除" />
+        android:layout_marginLeft="322dp"
+        android:layout_marginTop="311dp">
 
-            </RelativeLayout>
-            <!--                自定义模式2-->
-            <!--                自定义模式3-->
-            <RelativeLayout
-                android:id="@+id/view2"
-                android:layout_width="416dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:background="@drawable/first_moshi_brun">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="420dp"
+            android:layout_height="260dp"
+            android:id="@+id/my_re_view"
+            android:scrollbars="vertical"
+            />
 
-                <TextView
-                    android:id="@+id/text2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="64dp"
-                    android:layout_marginTop="20dp"
-                    android:text="自定义模式"
-                    android:textColor="#FFF"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/view2_set"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="333dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@mipmap/viewset"
-                    android:src="@mipmap/ic_launcher" />
-
-                <Button
-                    android:id="@+id/shezhi2"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="246dp"
-                    android:text="编译"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/shanchu2"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="326dp"
-                    android:text="删除"
-                    android:visibility="gone" />
-            </RelativeLayout>
-            <!--                自定义模式3-->
-            <RelativeLayout
-                android:id="@+id/view3"
-                android:layout_width="416dp"
-                android:layout_height="80dp"
-                android:background="@drawable/first_moshi_brun"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp">
-                <TextView
-                    android:id="@+id/text3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="自定义模式"
-                    android:textSize="24sp"
-                    android:textColor="#FFF"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="64dp"/>
-                <Button
-                    android:id="@+id/view3_set"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_marginLeft="333dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@mipmap/viewset"/>
-                <Button
-                    android:id="@+id/shezhi3"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:text="编译"
-                    android:layout_marginLeft="246dp"
-                    android:visibility="gone" />
-                <Button
-                    android:id="@+id/shanchu3"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="326dp"
-                    android:visibility="gone"
-                    android:text="删除" />
-            </RelativeLayout>
-            <!--                自定义模式4-->
-            <RelativeLayout
-                android:id="@+id/view4"
-                android:layout_width="416dp"
-                android:layout_height="80dp"
-                android:background="@drawable/first_moshi_brun"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp">
-                <TextView
-                    android:id="@+id/text4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="自定义模式"
-                    android:textSize="24sp"
-                    android:textColor="#FFF"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="64dp"/>
-                <Button
-                    android:id="@+id/view4_set"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_marginLeft="333dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@mipmap/viewset"/>
-                <Button
-                    android:id="@+id/shezhi4"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:text="编译"
-                    android:layout_marginLeft="246dp"
-                    android:visibility="gone" />
-                <Button
-                    android:id="@+id/shanchu4"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="326dp"
-                    android:visibility="gone"
-                    android:text="删除" />
-            </RelativeLayout>
-            <!--                自定义模式5-->
-            <RelativeLayout
-                android:id="@+id/view5"
-                android:layout_width="416dp"
-                android:layout_height="80dp"
-                android:background="@drawable/first_moshi_brun"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp">
-                <TextView
-                    android:id="@+id/text5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="自定义模式"
-                    android:textSize="24sp"
-                    android:textColor="#FFF"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="64dp"/>
-                <Button
-                    android:id="@+id/view5_set"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_marginLeft="333dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@mipmap/viewset"/>
-                <Button
-                    android:id="@+id/shezhi5"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:text="编译"
-                    android:layout_marginLeft="246dp"
-                    android:visibility="gone" />
-                <Button
-                    android:id="@+id/shanchu5"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginLeft="326dp"
-                    android:visibility="gone"
-                    android:text="删除" />
-            </RelativeLayout>
-
-        </LinearLayout>
     </ScrollView>
     <Button
         android:id="@+id/firsttianjia"
