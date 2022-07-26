@@ -151,9 +151,10 @@ public class CustomMode implements Parcelable {
        parcel.writeInt(chairMode);
        parcel.writeInt(lightMode);
        parcel.writeInt(atmosphereLamp);
-       parcel.writeInt(rmLeft);
-       parcel.writeInt(rmRight);
        parcel.writeInt(rmType);
        parcel.writeInt(rmStates);
+       parcel.writeInt(rmLeft);
+       parcel.writeInt(rmRight);
+
     }
 }

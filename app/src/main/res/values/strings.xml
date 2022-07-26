@@ -9,4 +9,8 @@
     <string name="dialg_confirm">确认</string>
     <string name="save_mode">确认存为新模式吗</string>
     <string name="edit_mode_tip">是否保存此次编辑</string>
+    <string name="drive_mode" >驾驶模式</string>
+    <string name="drive_mode_start">启动</string>
+    <string name="drive_mode_stop">停止</string>
+
 </resources>

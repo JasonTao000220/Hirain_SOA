@@ -394,14 +394,15 @@
 
     </RelativeLayout>
 <!--灯光-->
+
     <RelativeLayout
         android:id="@+id/carsetfragment_lamplight_layout_lemp"
         android:layout_width="1320dp"
         android:layout_height="500dp"
         android:layout_below="@id/save_new_mode"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="60dp"
         android:layout_marginTop="40dp"
+        android:layout_marginRight="67dp"
 
         android:background="@drawable/carset_layout_bur"
         android:visibility="visible">
@@ -417,34 +418,33 @@
             android:textSize="32sp" />
 
 
-
         <com.flyco.tablayout.SegmentTabLayout
-            android:layout_below="@id/light_tv"
             android:id="@+id/light_type"
             android:layout_width="match_parent"
             android:layout_height="72dp"
+            android:layout_below="@id/light_tv"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
             android:layout_marginTop="26dp"
+            android:layout_marginRight="100dp"
             android:background="@drawable/caeset_h_z_d_brun"
             android:padding="4dp"
-            tl:tl_textsize="24sp"
-            android:layout_gravity="center_horizontal"
             tl:tl_bar_stroke_width="0dp"
-            tl:tl_indicator_color="@color/dialog_start_bg"
-            tl:tl_textSelectColor="@color/white"
-            tl:tl_textUnselectColor="@color/white"
             tl:tl_indicator_anim_enable="true"
             tl:tl_indicator_bounce_enable="true"
-            tl:tl_tab_space_equal="true"/>
+            tl:tl_indicator_color="@color/dialog_start_bg"
+            tl:tl_tab_space_equal="true"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/white"
+            tl:tl_textsize="24sp" />
 
 
         <TextView
-            android:layout_below="@id/light_type"
-
             android:id="@+id/atmosphere_lamp_tv"
+
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_below="@id/light_type"
             android:layout_marginLeft="80dp"
             android:layout_marginTop="80dp"
             android:text="氛围灯模式"
@@ -452,24 +452,24 @@
             android:textSize="32sp" />
 
         <com.flyco.tablayout.SegmentTabLayout
-            android:layout_below="@id/atmosphere_lamp_tv"
             android:id="@+id/atmosphere_lamp"
             android:layout_width="match_parent"
             android:layout_height="72dp"
+            android:layout_below="@id/atmosphere_lamp_tv"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
             android:layout_marginTop="26dp"
+            android:layout_marginRight="100dp"
             android:background="@drawable/caeset_h_z_d_brun"
             android:padding="4dp"
-            tl:tl_textsize="24sp"
-            android:layout_gravity="center_horizontal"
             tl:tl_bar_stroke_width="0dp"
-            tl:tl_indicator_color="@color/dialog_start_bg"
-            tl:tl_textSelectColor="@color/white"
-            tl:tl_textUnselectColor="@color/white"
             tl:tl_indicator_anim_enable="true"
             tl:tl_indicator_bounce_enable="true"
-            tl:tl_tab_space_equal="true"/>
+            tl:tl_indicator_color="@color/dialog_start_bg"
+            tl:tl_tab_space_equal="true"
+            tl:tl_textSelectColor="@color/white"
+            tl:tl_textUnselectColor="@color/white"
+            tl:tl_textsize="24sp" />
 
     </RelativeLayout>
 

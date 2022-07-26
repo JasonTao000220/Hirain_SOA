@@ -72,6 +72,7 @@ public class CarsetFragment extends Fragment {
     //交互
     private FlatBufferBuilder fbb =new FlatBufferBuilder();
     private LocalSocket msocket = new LocalSocket();
+        private ImageView yin;
 
     //切换按钮
     private Button yinliang,hoshijing,zuoyi,dengguang;
@@ -84,7 +85,6 @@ public class CarsetFragment extends Fragment {
     private ImageView yinlianglog;
     private RadioGroup volume,zuoyouhsj;
     private RadioButton vb0,vb1,vb2,vb3,vb4,vb5,vb6,vb7,vb8,vb9,vb10;
-    private ImageView yin;
 
     //后视镜
     private Button jingshang,jingzuo,jingxia,jingyou;
@@ -252,8 +252,41 @@ public class CarsetFragment extends Fragment {
             @Override
             public void onTabSelect(int position) {
                 rearview_position=position+1;
-                Log.i("wxy", "onTabSelect: "+position);
                 customMode.setRmType(position);
+                try {
+                    int hsj1 =fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
+                        int hsj2 =fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
+                    int hsj3 =fbb.createByteVector(ByteBuffer.allocateDirect(0x01));
+                    int hsj4 =fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
+
+                    int mus = ExtMirrorServicelnfo.createExtMirrorServicelnfo(fbb,hsj1,hsj2,hsj3,hsj4);
+                    fbb.finish(mus);
+
+                    byte[] demarr =fbb.sizedByteArray();
+                    Log.e("system",demarr+"");
+
+                    short sizen =(short)(demarr.length);
+                    short name =0x01;
+
+                    byte[] bufnn =new byte[]{0x52,0x4f,0x41,0x00, (byte)(name >> 8),(byte)name, (byte) ( sizen >> 8), (byte) sizen};
+
+                    byte[] musisn = new byte[bufnn.length + demarr.length];
+                    System.arraycopy(bufnn,0,musisn,0,bufnn.length);
+                    System.arraycopy(demarr,0,musisn,bufnn.length,demarr.length);
+
+                    Log.e("system",musisn+"");
+
+
+                    LocalSocketAddress address=new LocalSocketAddress("/data/data/com.hirain.hirain/defauit.sock", LocalSocketAddress.Namespace.FILESYSTEM);
+                    msocket.connect(address);
+                    OutputStream data =msocket.getOutputStream();
+                    data.write(musisn);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("socket","连接失败");
+                }
+
+
             }
 
             @Override

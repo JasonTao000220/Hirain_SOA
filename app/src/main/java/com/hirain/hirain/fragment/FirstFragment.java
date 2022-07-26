@@ -34,6 +34,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hirain.hirain.MainActivity;
@@ -45,6 +46,7 @@ import com.hirain.hirain.R;
 import com.hirain.hirain.Song;
 import com.hirain.hirain.bean.event.EditModeEvent;
 import com.hirain.hirain.utils.MMkvUtils;
+import com.hirain.hirain.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -100,7 +102,7 @@ public class FirstFragment extends Fragment {
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onPrepared() {
-                    Log.i("wxy", "onPrepared: ");
+
 //                mediaPlayerUtil.start();
                     seekBar.setMax(MusicService.mediaPlayer.getDuration());
 
@@ -436,6 +438,12 @@ public class FirstFragment extends Fragment {
         musis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast toast = new Toast(getActivity());
+                View inflate = LayoutInflater.from(getActivity()).inflate(R.layout.custom_toast, null);
+                toast.setView(inflate);
+//                toast.show();
+//                Toast.makeText(getActivity(), "asdasd", Toast.LENGTH_SHORT).show();
+                ToastUtil.showToast(getActivity(),"自定义模式已开启");
 
 //                if(popupWindow==null){
 //                    popupWindow = new PopupWindow(getContext());

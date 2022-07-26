@@ -15,9 +15,11 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textColor="#fff"
-        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textSize="42sp"
 
         />
+
     <com.hirain.hirain.myview.NoScrollViewPager
         android:id="@+id/viewpaget_main"
         android:layout_width="1920dp"

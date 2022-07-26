@@ -3,8 +3,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.AlluseFragment">
-    
+    android:paddingLeft="260dp"
+    android:paddingTop="60dp"
+    android:paddingRight="60dp"
+    >
 
+    <TextView
+        android:layout_marginLeft="40dp"
+        android:id="@+id/drive_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/drive_mode"
+        android:textSize="32sp"
+        android:textColor="@color/color_8fd8f6"
+        />
+
+    <!--启动和停止-->
+    <TextView
+        android:id="@+id/drive_mode_start"
+        android:layout_alignParentRight="true"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:background="@drawable/shape_update_mode_10"
+        android:text="@string/drive_mode_start"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        />
+
+    <TextView
+        android:visibility="visible"
+        android:id="@+id/drive_mode_stop"
+        android:layout_toLeftOf="@id/drive_mode_start"
+        android:layout_width="120dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/shape_save_mode_10"
+        android:text="@string/drive_mode_stop"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        />
+
+
+
+
+
+
+    <!--左边路线选择-->
+
+    <Button
+        android:layout_below="@id/drive_mode"
+        android:id="@+id/drive_mode_line1"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@mipmap/yinliang"
+        android:layout_marginTop="50dp"
+        />
+
+    <Button
+        android:layout_below="@id/drive_mode_line1"
+        android:id="@+id/drive_mode_line2"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@mipmap/nohshijing"
+        android:layout_marginTop="10dp"
+         />
+
+    <Button
+        android:layout_below="@id/drive_mode_line2"
+        android:id="@+id/drive_mode_line3"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@mipmap/zuoyiquanbi"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
+        android:layout_below="@id/drive_mode_line3"
+        android:id="@+id/drive_mode_line4"
+        android:layout_width="298dp"
+        android:layout_height="82dp"
+        android:background="@drawable/drive_mode_selector1"
+        android:layout_marginTop="10dp"
+         />
+
+    <!--视频播放-->
+    <RelativeLayout
+        android:id="@+id/video_rl"
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/drive_mode"
+        android:layout_toRightOf="@id/drive_mode_line1"
+        android:background="@drawable/shape_drive_mode_16"
+        android:layout_width="640dp"
+        android:layout_height="500dp">
+        <VideoView
+            android:id="@+id/video_left"
+            android:layout_centerInParent="true"
+            android:layout_width="500dp"
+            android:layout_height="400dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/drive_mode"
+        android:layout_toRightOf="@id/video_rl"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/shape_drive_mode_16"
+        android:layout_width="640dp"
+        android:layout_height="500dp">
+        <VideoView
+
+            android:id="@+id/video_right"
+            android:layout_centerInParent="true"
+            android:layout_width="500dp"
+            android:layout_height="500dp"/>
+
+
+    </RelativeLayout>
 
 </RelativeLayout>

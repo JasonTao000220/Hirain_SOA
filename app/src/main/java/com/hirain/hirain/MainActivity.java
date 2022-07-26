@@ -7,7 +7,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
     //系统时间
     private TextView systemTime;
     private Timer timer;
+    private AlluseFragment alluseFragment;
+    private FirstFragment firstFragment;
+    private CarsetFragment carsetFragment;
+    private UserFragment userFragment;
 
     public static List<Song> getSongList(){
 
@@ -102,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            Log.i("wxy", "handleMessage:adads ");
             init();
         }
     };
@@ -132,15 +139,20 @@ public class MainActivity extends AppCompatActivity {
         //二级联动
         viewPager=findViewById(R.id.viewpaget_main);
         radioGroup=findViewById(R.id.radiogroup_main);
-
-        fragmentList.add(new FirstFragment());
-        fragmentList.add(new CarsetFragment());
-        fragmentList.add(new AlluseFragment());
-        fragmentList.add(new UserFragment());
+        //四个fragment
+        alluseFragment = new AlluseFragment();
+        firstFragment = new FirstFragment();
+        carsetFragment = new CarsetFragment();
+        userFragment = new UserFragment();
+        //
+        fragmentList.add(firstFragment);
+        fragmentList.add(carsetFragment);
+        fragmentList.add(alluseFragment);
+        fragmentList.add(userFragment);
 
         viewPager.setOffscreenPageLimit(3);
         //todo viewPager适配器
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @NonNull
             @Override
             public Fragment getItem(int position) {
@@ -171,9 +183,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
          radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
              @Override
              public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
                  if(isEdit){
                      //在编辑模式下，弹窗提示
                      DialogUtils.customView(MainActivity.this, R.string.edit_mode_tip, R.string.dialog_cancle,
@@ -184,8 +199,6 @@ public class MainActivity extends AppCompatActivity {
                                      isEdit=false;
                                      selectMenu (i);
                                  }
-
-                                 @Override
                                  public void rightClickListener(String text) {
                                      EventBus.getDefault().post(new EditModeEvent("aa",1));
                                      isEdit=false;
@@ -209,17 +222,23 @@ public class MainActivity extends AppCompatActivity {
         timer.schedule(timerTask,1000,30000);
 
     }
+
+
     public  void selectMenu(int i){
+
         switch (i){
             case R.id.radio_1:
+                alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.GONE);
                 viewPager.setCurrentItem(0);
+
                 r1.setBackgroundResource(R.mipmap.my);
                 r2.setBackgroundResource(R.mipmap.homeno);
                 r3.setBackgroundResource(R.mipmap.carsetno);
                 r4.setBackgroundResource(R.mipmap.viewno);
                 break;
             case R.id.radio_2:
+                alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(1);
                 r1.setBackgroundResource(R.mipmap.meno);
@@ -228,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 r4.setBackgroundResource(R.mipmap.viewno);
                 break;
             case R.id.radio_3:
+                alluseFragment.playVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(2);
                 r1.setBackgroundResource(R.mipmap.meno);
@@ -236,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 r4.setBackgroundResource(R.mipmap.viewno);
                 break;
             case R.id.radio_4:
+                alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(3);
                 r1.setBackgroundResource(R.mipmap.meno);
@@ -311,6 +332,10 @@ public class MainActivity extends AppCompatActivity {
         long currentTime = System.currentTimeMillis();
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         Date date = new Date(currentTime);
+        String path = "fonts" + File.separator + "digital-7.ttf";
+        AssetManager am =getAssets();
+        Typeface tf = Typeface.createFromAsset(am, path);
+        systemTime.setTypeface(tf);
         systemTime.setText(formatter.format(date));
     }
     //添加模式
