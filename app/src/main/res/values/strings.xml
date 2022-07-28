@@ -12,5 +12,7 @@
     <string name="drive_mode" >驾驶模式</string>
     <string name="drive_mode_start">启动</string>
     <string name="drive_mode_stop">停止</string>
+    <string name="repeat_name">自定义名字已存在</string>
+    <string name="mode_start">%s已开启</string>
 
 </resources>

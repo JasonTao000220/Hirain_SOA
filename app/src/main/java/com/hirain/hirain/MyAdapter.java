@@ -1,5 +1,6 @@
 package com.hirain.hirain;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +29,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public OnItemClickListener onItemClickListener;
     public OnMenuItemClickListener onMenuItemClickListener;
+    public Context context;
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
+        context=parent.getContext();
         final View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_letter,
                 parent,false);
         final MyViewHolder myViewHolder = new MyViewHolder(inflate);
@@ -45,9 +47,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         holder.textlayout.setText(mList.get(position).getModeName());
         if(mList.get(position).isSel){
-            holder.item.setBackgroundResource(R.color.white_50);
+//            holder.item.setBackgroundColor(context.getResources().getColor(R.color.white_50));
+            holder.item.setBackgroundResource(R.drawable.shape_mode_white_20_item_5);
         }else {
-            holder.item.setBackgroundResource(R.color.tm);
+//            holder.item.setBackgroundColor(context.getResources().getColor(R.color.white_20));
+            holder.item.setBackgroundResource(R.drawable.shape_mode_item_5);
         }
 
         holder.swipeMenuLayout.setSwipeeMenuMoveListener(new SwipeMenuLayout.SwipeeMenuMoveListener() {
@@ -72,16 +76,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mList.get(position).isSel){
-                    mList.get(position).setSel(false);
-                }else {
-                    for (int i = 0; i < mList.size(); i++) {
-                        mList.get(i).setSel(false);
-                    }
-                    mList.get(position).setSel(true);
 
-                }
-                notifyDataSetChanged();
                 if(onItemClickListener!=null){
                     onItemClickListener.itemClick(position);
                 }

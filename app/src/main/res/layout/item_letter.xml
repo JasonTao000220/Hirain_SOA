@@ -14,7 +14,7 @@
         android:id="@+id/model_name"
         android:layout_width="146dp"
         android:layout_height="40dp"
-        android:textColor="@color/white_20"
+        android:textColor="@color/white_80"
         android:layout_marginLeft="84dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/detail_bt"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:src="@mipmap/model_meun"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
@@ -62,7 +62,7 @@
         android:layout_height="80dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/white_10"
+        android:background="#80FF7575"
         >
         <ImageView
             android:layout_width="28dp"

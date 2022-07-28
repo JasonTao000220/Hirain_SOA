@@ -4,6 +4,8 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -40,6 +42,7 @@ import com.google.gson.Gson;
 import com.hirain.hirain.MainActivity;
 import com.hirain.hirain.bean.ModelItem;
 import com.hirain.hirain.bean.UdpBean;
+import com.hirain.hirain.dialog.DialogUtils;
 import com.hirain.hirain.service.MusicService;
 import com.hirain.hirain.MyAdapter;
 import com.hirain.hirain.R;
@@ -51,10 +54,17 @@ import com.hirain.hirain.utils.ToastUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
+import java.util.zip.Checksum;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.MODE_PRIVATE;
@@ -153,6 +163,14 @@ public class FirstFragment extends Fragment {
     private TextView musicProgress;
     private TextView musicDuration;
     private MyAdapter myAdapter;
+    //温度
+    private TextView temperatureTv;
+    //时间
+    private TextView timeTv;
+    //日期
+    private TextView dateTv;
+    //氛围灯模式
+    private TextView lightMode;
 
     private void updateProgress() {
         // 使用Handler每间隔1s发送一次空消息，通知进度条更新
@@ -199,6 +217,20 @@ public class FirstFragment extends Fragment {
                     myAdapter.mList.addAll(data);
                     myAdapter.notifyDataSetChanged();
                     break;
+                case 4:
+                    //保存新模式
+                    Set<String> set = MMkvUtils.getmInstance().decodeSet(MMkvUtils.MODE);
+                    ArrayList<ModelItem> datas = new ArrayList<>();
+
+                    for (String str : set) {
+                        ModelItem modelItem = new ModelItem();
+                        modelItem.setModeName(str);
+                        datas.add(modelItem);
+                    }
+                    myAdapter.mList.clear();
+                    myAdapter.mList.addAll(datas);
+                    myAdapter.notifyDataSetChanged();
+                    break;
 
             }
 
@@ -235,7 +267,9 @@ public class FirstFragment extends Fragment {
 
         //从本地获取
         Set<String> strings = MMkvUtils.getmInstance().decodeSet(MMkvUtils.MODE);
-
+        if(strings==null){
+            strings=new HashSet<>();
+        }
         ArrayList<ModelItem> data = new ArrayList<>();
 
         for (String str : strings) {
@@ -257,9 +291,69 @@ public class FirstFragment extends Fragment {
         tianjia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//需要做个判断，判断是否超过多少多少条
-                //添加新模式  ，跳转到第二个页面
-                MainActivity activity = (MainActivity) getActivity();
-                activity.selectMenu(R.id.radio_2);
+                //添加新模式  ---设置名字----，跳转到第二个页面
+             /*   MainActivity activity = (MainActivity) getActivity();
+                activity.selectMenu(R.id.radio_2);*/
+                DialogUtils.customEditView(getActivity(), R.string.save_mode, R.string.dialog_cancle, R.string.dialg_confirm,
+                        new DialogUtils.onClickListener() {
+                            @Override
+                            public void leftClickListener() {
+
+                            }
+
+                            @Override
+                            public void rightClickListener(String text) {
+                                Set<String> mode = MMkvUtils.getmInstance().decodeSet(MMkvUtils.MODE);
+                                if(text.isEmpty()){
+                                    int index=1;
+                                    text="自定义模式"+index;
+                                    text= checkModeName(text, index, mode);
+                                    mode.add(text);
+                                }else {
+                                    boolean add = mode.add(text);
+                                    if(!add){
+                                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.repeat_name));
+                                        return;
+                                    }
+                                }
+                                Log.i("wxy", "rightClickListener: "+mode.toString());
+
+                                MMkvUtils.getmInstance().encodeSet(MMkvUtils.MODE,mode);
+                                EventBus.getDefault().post(new EditModeEvent(text,4));
+                            }
+                        });
+            }
+        });
+
+        myAdapter.setOnItemListenter(new MyAdapter.OnItemClickListener() {
+            @Override
+            public void itemClick(int position) {
+                ModelItem modelItem = myAdapter.mList.get(position);
+
+                DialogUtils.modeTipView(getActivity(), new DialogUtils.onClickListener() {
+                    @Override
+                    public void leftClickListener() {
+
+                    }
+
+                    @Override
+                    public void rightClickListener(String text) {
+
+                        if(myAdapter.mList.get(position).isSel){
+                            myAdapter.mList.get(position).setSel(false);
+                        }else {
+                            for (int i = 0; i < myAdapter.mList.size(); i++) {
+                                myAdapter.mList.get(i).setSel(false);
+                            }
+                            myAdapter.mList.get(position).setSel(true);
+
+                        }
+                        myAdapter.notifyDataSetChanged();
+
+                        //确认开启
+                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,modelItem.getModeName()));
+                    }
+                });
             }
         });
 
@@ -289,7 +383,11 @@ public class FirstFragment extends Fragment {
                 if(b){
                     //获取进度条改变后的位置并播放
                     MusicService.mediaPlayer.seekTo(i);
+                    bofang.setImageResource(R.mipmap.pause);
                 }
+
+
+
 
 
             }
@@ -309,7 +407,7 @@ public class FirstFragment extends Fragment {
         //播放按钮
         bofang.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View viiew) {
                 binder.playMusic();
                 if(!MusicService.mediaPlayer.isPlaying()){
                     bofang.setImageResource(R.mipmap.play);
@@ -344,8 +442,65 @@ public class FirstFragment extends Fragment {
             }
         });
 
+
+        //todo 模式
+        //音乐
+        musis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogUtils.modeTipView(getActivity(), new DialogUtils.onClickListener() {
+                    @Override
+                    public void leftClickListener() {
+
+                    }
+
+                    @Override
+                    public void rightClickListener(String text) {
+                        //确认开启
+                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"音乐模式"));
+
+                    }
+                });
+            }
+        });
+        //展示
+        show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogUtils.modeTipView(getActivity(), new DialogUtils.onClickListener() {
+                    @Override
+                    public void leftClickListener() {
+
+                    }
+
+                    @Override
+                    public void rightClickListener(String text) {
+                        //确认开启
+                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"展示模式"));
+
+
+                    }
+                });
+
+            }
+        });
+
+
     }
 
+
+    public String checkModeName(String name, int index, Set<String> mode){
+        boolean isRepeat=mode.add(name);
+        while (!isRepeat){
+            index++;
+            name="自定义模式"+index;
+            isRepeat=mode.add(name);
+
+        }
+
+
+        return name;
+    }
 
 
     //初始化控件
@@ -360,6 +515,16 @@ public class FirstFragment extends Fragment {
 
         textView2=getActivity().findViewById(R.id.text2);
 
+        temperatureTv = getActivity().findViewById(R.id.temperature_tv);
+        timeTv = getActivity().findViewById(R.id.time_tv);
+        dateTv = getActivity().findViewById(R.id.date_tv);
+        lightMode = getActivity().findViewById(R.id.light_mode);
+        String path = "fonts" + File.separator + "digital-7.ttf";
+        AssetManager am =getActivity().getAssets();
+        Typeface tf = Typeface.createFromAsset(am, path);
+        temperatureTv.setTypeface(tf);
+        timeTv.setTypeface(tf);
+        dateTv.setTypeface(tf);
 
         //音乐卡片
         listbanner =new ArrayList<>();//mv图片
@@ -372,6 +537,9 @@ public class FirstFragment extends Fragment {
         musicName = getActivity().findViewById(R.id.music_name);
         musicProgress = getActivity().findViewById(R.id.music_progress);
         musicDuration = getActivity().findViewById(R.id.music_duration);
+
+
+
         shangyiso=getActivity().findViewById(R.id.shangyis);
         xiayiso=getActivity().findViewById(R.id.xiayiso);
         zanting=getActivity().findViewById(R.id.zanting);
@@ -399,8 +567,19 @@ public class FirstFragment extends Fragment {
         } else {
             return time / 1000 / 60 + ":" + time / 1000 % 60;
         }
-
     }
+
+
+    public void initTime(){
+        long currentTime = System.currentTimeMillis();
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        Date date = new Date(currentTime);
+        timeTv.setText(formatter.format(date));
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy.MM.dd");
+        Date date2 = new Date(currentTime);
+        dateTv.setText(formatter2.format(date2));
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -408,116 +587,7 @@ public class FirstFragment extends Fragment {
         mHandler.removeCallbacksAndMessages(null);
 
     }
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        //随机点击关闭设置，删除框
-        firstfrag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //自定义条目
-
-                //设置按钮
-               /* shezhi1.setVisibility(View.GONE);
-                shezhi2.setVisibility(View.GONE);
-                shezhi3.setVisibility(View.GONE);
-                shezhi4.setVisibility(View.GONE);
-                shezhi5.setVisibility(View.GONE);
-                //删除按钮
-                shancu1.setVisibility(View.GONE);
-                shancu2.setVisibility(View.GONE);
-                shancu3.setVisibility(View.GONE);
-                shancu4.setVisibility(View.GONE);
-                shancu5.setVisibility(View.GONE);*/
-            }
-        });
-
-        //todo 模式
-        //音乐
-        musis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast toast = new Toast(getActivity());
-                View inflate = LayoutInflater.from(getActivity()).inflate(R.layout.custom_toast, null);
-                toast.setView(inflate);
-//                toast.show();
-//                Toast.makeText(getActivity(), "asdasd", Toast.LENGTH_SHORT).show();
-                ToastUtil.showToast(getActivity(),"自定义模式已开启");
-
-//                if(popupWindow==null){
-//                    popupWindow = new PopupWindow(getContext());
-//                    popupWindow.setBackgroundDrawable(null);
-//                    View inflate = LayoutInflater.from(getContext()).inflate(R.layout.dialog, null, false);
-////                    inflate.findViewById()
-//                    popupWindow.setContentView(inflate);
-//                    popupWindow.setHeight(1920);
-//                    popupWindow.setWidth(720);
-//                }
-//
-//
-//                popupWindow.showAtLocation(musis, Gravity.NO_GRAVITY,0,0);
-
-//                com.hirain.hirain.myview.Dialog dialog=new com.hirain.hirain.myview.Dialog(getActivity());
-////                dialog.setTitle("");
-//                dialog.setMessage("确认开启音乐模式");
-//
-//                dialog.setCancel("取消", new Dialog.OnCancelListener() {
-//                    @Override
-//                    public void onCancel(Dialog dialog) {
-//
-//                    }
-//                });
-//                dialog.setConfirm("确认", new Dialog.OnConfirmListener() {
-//                    @Override
-//                    public void onConfirm(Dialog dialog) {
-//
-//                    }
-//                });
-//                dialog.show();
-//
-//                Toast.makeText(getActivity(), "正在启动音乐模式", Toast.LENGTH_SHORT).show();
-            }
-        });
-        //展示
-        show.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-//                Toast.makeText(getActivity(), "正在启动展示模式", Toast.LENGTH_SHORT).show();
-             /*   DialogUtils.customView(getActivity(), R.string.start_model, R.string.dialog_cancle, R.string.dialg_start, new DialogUtils.onClickListener() {
-                    @Override
-                    public void leftClickListener() {
-
-                    }
-
-                    @Override
-                    public void rightClickListener(String text) {
-                        //开启
-                        Toast.makeText(getActivity(), "自定义模式已开启", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                DialogUtils.customEditView(getActivity(), R.string.set_model, R.string.dialog_cancle, R.string.dialg_confirm, new DialogUtils.onClickListener() {
-                    @Override
-                    public void leftClickListener() {
-
-                    }
-
-                    @Override
-                    public void rightClickListener(String text) {
-                        //开启
-                        Toast.makeText(getActivity(), "自定义模式已开启", Toast.LENGTH_SHORT).show();
-                    }
-                });
-*/
-
-            }
-        });
-
-
-
-    }
 
 
 }

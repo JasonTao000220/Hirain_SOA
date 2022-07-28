@@ -1,12 +1,14 @@
 package com.hirain.hirain.dialog;
 
-import android.app.Dialog;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +17,7 @@ import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AlertDialog;
 
 import com.hirain.hirain.R;
+import com.hirain.hirain.myview.Dialog;
 
 import java.lang.ref.WeakReference;
 
@@ -68,6 +71,47 @@ public class DialogUtils {
         void leftClickListener();
         void rightClickListener(String text);
     }
+
+    public static Dialog modeTipView(Context context, onClickListener clickListener) {
+        Dialog dialog = new Dialog(context,R.style.Dialog);
+
+
+
+        View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_style, null, false);
+        dialog.setContentView(inflate);
+        TextView title = inflate.findViewById(R.id.dialog_title);
+        TextView cancle = inflate.findViewById(R.id.dialog_cancle);
+        TextView start = inflate.findViewById(R.id.dialog_start);
+        //给标题和两个按钮赋值
+        title.setText(R.string.start_model);
+        cancle.setText(R.string.dialog_cancle);
+        start.setText(R.string.dialg_confirm);
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(clickListener!=null){
+                    clickListener.leftClickListener();
+
+                }
+                dialog.dismiss();
+            }
+        });
+
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(clickListener!=null){
+                    clickListener.rightClickListener("");
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        return dialog;
+    }
+
 
     public static Dialog customView(Context context,int titles,int leftText,int rightText,onClickListener clickListener) {
         Dialog dialog = new Dialog(context,R.style.Dialog);
@@ -155,7 +199,6 @@ public class DialogUtils {
         return dialog;
     }
 
-
-   }
+}
 
 

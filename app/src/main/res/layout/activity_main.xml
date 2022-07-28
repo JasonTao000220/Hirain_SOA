@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="1920dp"
     android:layout_height="720dp"
-    android:background="@drawable/shape_main_bg"
+    android:background="@mipmap/home_bg"
     tools:context=".MainActivity">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:textColor="#fff"
+        android:textColor="@color/color_c9cbd1"
         android:textStyle="bold"
         android:textSize="42sp"
 
@@ -57,13 +57,14 @@
         android:layout_height="720dp">
 
         <RadioButton
+            android:checked="true"
             android:id="@+id/radio_1"
             android:layout_width="128dp"
             android:layout_height="128dp"
             android:button="@null"
             android:layout_marginTop="56dp"
             android:layout_marginLeft="68dp"
-            android:background="@mipmap/my"/>
+            android:background="@drawable/main_home_selector"/>
 
         <RadioButton
             android:id="@+id/radio_2"
@@ -72,7 +73,7 @@
             android:button="@null"
             android:layout_marginTop="32dp"
             android:layout_marginLeft="68dp"
-            android:background="@mipmap/homeno"/>
+            android:background="@drawable/main_mode_selector"/>
 
         <RadioButton
             android:id="@+id/radio_3"
@@ -81,7 +82,7 @@
             android:button="@null"
             android:layout_marginTop="56dp"
             android:layout_marginLeft="68dp"
-            android:background="@mipmap/carsetno"/>
+            android:background="@drawable/main_drive_selector"/>
 
         <RadioButton
             android:id="@+id/radio_4"
@@ -90,7 +91,7 @@
             android:button="@null"
             android:layout_marginTop="56dp"
             android:layout_marginLeft="68dp"
-            android:background="@mipmap/viewno"/>
+            android:background="@drawable/main_user_selector"/>
     </RadioGroup>
 
 </RelativeLayout>

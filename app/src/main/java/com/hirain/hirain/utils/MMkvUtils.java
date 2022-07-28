@@ -7,6 +7,7 @@ import com.hirain.hirain.bean.CustomMode;
 import com.tencent.mmkv.MMKV;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class MMkvUtils {
@@ -44,7 +45,11 @@ public class MMkvUtils {
 
     }
     public Set<String> decodeSet(String key){
-        return mmkv.decodeStringSet(key);
+        Set<String> strings = mmkv.decodeStringSet(key);
+        if(strings==null){
+            strings=new HashSet<>();
+        }
+        return strings;
 
     }
     public String decodeString(String key){

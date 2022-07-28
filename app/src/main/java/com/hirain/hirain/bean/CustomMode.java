@@ -16,7 +16,7 @@ public class CustomMode implements Parcelable {
     //氛围灯
     public int atmosphereLamp;    //0,1,2,3
     //后视镜状态  开启0 折叠1
-    public int  rmType;
+    public int  rmType=1;
     //后视镜的选择 0 左 1右
     public int rmStates;
     //左后视镜的状态

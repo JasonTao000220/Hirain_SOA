@@ -2,6 +2,7 @@ package com.hirain.hirain.fragment;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.icu.lang.UProperty;
 import android.media.AudioManager;
 import android.net.LocalSocket;
@@ -36,6 +37,7 @@ import com.hirain.hirain.bean.event.EditModeEvent;
 import com.hirain.hirain.dialog.DialogUtils;
 import com.hirain.hirain.flaterbuffers.hsj.ExtMirrorServicelnfo;
 import com.hirain.hirain.utils.MMkvUtils;
+import com.hirain.hirain.utils.ToastUtil;
 
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,7 +74,7 @@ public class CarsetFragment extends Fragment {
     //交互
     private FlatBufferBuilder fbb =new FlatBufferBuilder();
     private LocalSocket msocket = new LocalSocket();
-        private ImageView yin;
+    private ImageView yin;
 
     //切换按钮
     private Button yinliang,hoshijing,zuoyi,dengguang;
@@ -92,15 +94,15 @@ public class CarsetFragment extends Fragment {
     private int rearview_position;
     private ImageView select_position;
     //后视镜状态
-    private String[] rmType = {"打开", "折叠"};
+    private String[] rmType = {"打开", "关闭"};
     //左右后视镜
     private String[] rmDirection = {"左", "右"};
     //座椅
-    private String[] chairType = {"自由状态", "位置一","位置二","位置三"};
+    private String[] chairType = {"自定义", "前","中","后"};
     //灯光模式
-    private String[] lightType = {"关闭", "mode1","mode2","mode3"};
+    private String[] lightType = {"关闭", "长亮","解锁","闪烁"};
     //氛围灯模式
-    private String[] atmosphereLamp = {"关闭", "mode1","mode2","mode3"};
+    private String[] atmosphereLamp = {"关闭", "动感","舒缓","节奏","缤纷"};
 
     private SegmentTabLayout rmTypeTab;
     private SegmentTabLayout rmDirectionTab;
@@ -112,6 +114,9 @@ public class CarsetFragment extends Fragment {
     //用于记录选择的状态，方便保存模式
     private CustomMode customMode;
     private String modeName;
+    private TextView modeNameTv;
+    private TextView view;
+    private LinearLayout saveModeLin;
 
 
     @Override
@@ -128,6 +133,9 @@ public class CarsetFragment extends Fragment {
             modeName = editModeEvent.getModeName();
             switch (editModeEvent.getEditState()) {
                 case 0:
+
+                    view.setVisibility(View.VISIBLE);
+
                     yinliang.setBackgroundResource(R.mipmap.yinliang);
                     hoshijing.setBackgroundResource(nohshijing);
                     zuoyi.setBackgroundResource(zuoyiquanbi);
@@ -137,16 +145,30 @@ public class CarsetFragment extends Fragment {
                     rlz.setVisibility(View.GONE);
                     rld.setVisibility(View.GONE);
                     upDateMode.setVisibility(View.VISIBLE);
+                    modeNameTv.setVisibility(View.VISIBLE);
+                    modeNameTv.setText(editModeEvent.getModeName());
                     configMode(editModeEvent.getModeName());
+
                     break;
                 case 1:
                     //保存编辑
                     Log.i("wcu", "getMessage: "+customMode);
                     MMkvUtils.getmInstance().encodeParcelable(modeName,customMode);
+                    upDateMode.setVisibility(View.GONE);
+                    view.setVisibility(View.GONE);
+                    modeNameTv.setVisibility(View.GONE);
+                    newMode.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     //取消编辑
+                    newMode.setVisibility(View.VISIBLE);
+                    view.setVisibility(View.GONE);
                     upDateMode.setVisibility(View.GONE);
+                    modeNameTv.setVisibility(View.GONE);
+                    break;
+                case 4:
+                    newMode.setVisibility(View.GONE);
+                    upDateMode.setVisibility(View.VISIBLE);
                     break;
 
             }
@@ -235,16 +257,27 @@ public class CarsetFragment extends Fragment {
 
     private void initListener() {
         //后视镜选择
+
+
+
         rmDirectionTab.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
                 Log.i("wxy", "onTabSelect: "+position);
-                customMode.setRmStates(position);
+
+                if(rearview_position==2){
+                    ToastUtil.showToast(getActivity(),"请先打开后视镜");
+                }else {
+                    customMode.setRmStates(position);
+                }
+
+
+
             }
 
             @Override
             public void onTabReselect(int position) {
-
+                Log.i("wxy", "onTabSelect:aaaas "+position);
             }
         });
         //后视镜打开/关闭
@@ -253,37 +286,10 @@ public class CarsetFragment extends Fragment {
             public void onTabSelect(int position) {
                 rearview_position=position+1;
                 customMode.setRmType(position);
-                try {
-                    int hsj1 =fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
-                        int hsj2 =fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
-                    int hsj3 =fbb.createByteVector(ByteBuffer.allocateDirect(0x01));
-                    int hsj4 =fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
-
-                    int mus = ExtMirrorServicelnfo.createExtMirrorServicelnfo(fbb,hsj1,hsj2,hsj3,hsj4);
-                    fbb.finish(mus);
-
-                    byte[] demarr =fbb.sizedByteArray();
-                    Log.e("system",demarr+"");
-
-                    short sizen =(short)(demarr.length);
-                    short name =0x01;
-
-                    byte[] bufnn =new byte[]{0x52,0x4f,0x41,0x00, (byte)(name >> 8),(byte)name, (byte) ( sizen >> 8), (byte) sizen};
-
-                    byte[] musisn = new byte[bufnn.length + demarr.length];
-                    System.arraycopy(bufnn,0,musisn,0,bufnn.length);
-                    System.arraycopy(demarr,0,musisn,bufnn.length,demarr.length);
-
-                    Log.e("system",musisn+"");
-
-
-                    LocalSocketAddress address=new LocalSocketAddress("/data/data/com.hirain.hirain/defauit.sock", LocalSocketAddress.Namespace.FILESYSTEM);
-                    msocket.connect(address);
-                    OutputStream data =msocket.getOutputStream();
-                    data.write(musisn);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("socket","连接失败");
+                if(position==1){
+                    rmDirectionTab.setIndicatorColor(getResources().getColor(R.color.tm));
+                }else {
+                    rmDirectionTab.setIndicatorColor(getResources().getColor(R.color.dialog_start_bg));
                 }
 
 
@@ -401,6 +407,9 @@ public class CarsetFragment extends Fragment {
         atmosphereLampTab = getActivity().findViewById(R.id.atmosphere_lamp);
         newMode = getActivity().findViewById(R.id.save_new_mode);
         upDateMode = getActivity().findViewById(R.id.update_mode);
+        modeNameTv = getActivity().findViewById(R.id.carse_mode_name);
+        view = getActivity().findViewById(R.id.view);
+        saveModeLin = getActivity().findViewById(R.id.save_new_mode_lin);
 
         rmTypeTab.setTabData(rmType);
         rmDirectionTab.setTabData(rmDirection);

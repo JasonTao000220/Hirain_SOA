@@ -54,7 +54,7 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         EventBus.getDefault().register(this);
         initView();
-        initData();
+        initData(R.raw.video6,R.raw.video3);
         initListener();
     }
 
@@ -73,13 +73,18 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void initData() {
-
-        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.video1);
+    private void initData(int leftPath,int rightPath) {
+        if(leftVideo.isPlaying()){
+            leftVideo.pause();
+        }
+        if(rightVideo.isPlaying()){
+            rightVideo.pause();
+        }
+        Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + leftPath);
         leftVideo.setVideoURI(uri);
 
 //        leftVideo.start();
-        Uri uri2 = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.video3);
+        Uri uri2 = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + rightPath);
         rightVideo.setVideoURI(uri2);
 
 //        rightVideo.start();
@@ -141,13 +146,10 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
             leftVideo.requestFocus();
             rightVideo.requestFocus();
             isPlay = true;
-            rightVideo.start();
-            leftVideo.start();
-        }else {
-            rightVideo.start();
-            leftVideo.start();
-        }
 
+        }
+        rightVideo.start();
+        leftVideo.start();
 
     }
 
@@ -170,24 +172,36 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
                 leftVideo.pause();
                 break;
             case R.id.drive_mode_line1:
+                initData(R.raw.video6,R.raw.video3);
+                isPlay=false;
+                playVideo();
                 line1.setBackgroundResource(R.mipmap.yinliang);
                 line2.setBackgroundResource(nohshijing);
                 line3.setBackgroundResource(zuoyiquanbi);
                 line4.setBackgroundResource(nodengguang);
                 break;
             case R.id.drive_mode_line2:
+                initData(R.raw.video3,R.raw.video2);
+                isPlay=false;
+                playVideo();
                 line1.setBackgroundResource(R.mipmap.noyinliang);
                 line2.setBackgroundResource(hshijing);
                 line3.setBackgroundResource(zuoyiquanbi);
                 line4.setBackgroundResource(nodengguang);
                 break;
             case R.id.drive_mode_line3:
+                initData(R.raw.video2,R.raw.video3);
+                isPlay=false;
+                playVideo();
                 line1.setBackgroundResource(R.mipmap.noyinliang);
                 line2.setBackgroundResource(nohshijing);
                 line3.setBackgroundResource(R.mipmap.zuoyi);
                 line4.setBackgroundResource(nodengguang);
                 break;
             case R.id.drive_mode_line4:
+                initData(R.raw.video4,R.raw.video6);
+                isPlay=false;
+                playVideo();
                 line1.setBackgroundResource(R.mipmap.noyinliang);
                 line2.setBackgroundResource(nohshijing);
                 line3.setBackgroundResource(zuoyiquanbi);

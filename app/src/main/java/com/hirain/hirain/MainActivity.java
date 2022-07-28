@@ -11,11 +11,13 @@ import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -76,21 +78,17 @@ public class MainActivity extends AppCompatActivity {
             EditModeEvent editModeEvent= (EditModeEvent) event;
             switch (editModeEvent.getEditState()) {
                 case 0:
-
-                    r1.setBackgroundResource(R.mipmap.meno);
-                    r2.setBackgroundResource(R.mipmap.home);
-                    r3.setBackgroundResource(R.mipmap.carsetno);
-                    r4.setBackgroundResource(R.mipmap.viewno);
-                    viewPager.setCurrentItem(1);
+                case 4:
+                    select();
+                    r2.setChecked(true);
                     isEdit=true;
                     break;
                 case 1:
                     isEdit=false;
                     viewPager.setCurrentItem(0);
-                    r1.setBackgroundResource(R.mipmap.my);
-                    r2.setBackgroundResource(R.mipmap.homeno);
-                    r3.setBackgroundResource(R.mipmap.carsetno);
-                    r4.setBackgroundResource(R.mipmap.viewno);
+                    select();
+                    r1.setChecked(true);
+
 
                     break;
                 case 2:
@@ -139,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         //二级联动
         viewPager=findViewById(R.id.viewpaget_main);
         radioGroup=findViewById(R.id.radiogroup_main);
+
+
         //四个fragment
         alluseFragment = new AlluseFragment();
         firstFragment = new FirstFragment();
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                                      selectMenu (i);
                                  }
                                  public void rightClickListener(String text) {
-                                     EventBus.getDefault().post(new EditModeEvent("aa",1));
+                                     EventBus.getDefault().post(new EditModeEvent("",1));
                                      isEdit=false;
                                      selectMenu (i);
                                  }
@@ -231,40 +231,38 @@ public class MainActivity extends AppCompatActivity {
                 alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.GONE);
                 viewPager.setCurrentItem(0);
-
-                r1.setBackgroundResource(R.mipmap.my);
-                r2.setBackgroundResource(R.mipmap.homeno);
-                r3.setBackgroundResource(R.mipmap.carsetno);
-                r4.setBackgroundResource(R.mipmap.viewno);
+                select();
+                r1.setChecked(true);
                 break;
             case R.id.radio_2:
                 alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(1);
-                r1.setBackgroundResource(R.mipmap.meno);
-                r2.setBackgroundResource(R.mipmap.home);
-                r3.setBackgroundResource(R.mipmap.carsetno);
-                r4.setBackgroundResource(R.mipmap.viewno);
+                select();
+                r2.setChecked(true);
                 break;
             case R.id.radio_3:
                 alluseFragment.playVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(2);
-                r1.setBackgroundResource(R.mipmap.meno);
-                r2.setBackgroundResource(R.mipmap.homeno);
-                r3.setBackgroundResource(R.mipmap.carset);
-                r4.setBackgroundResource(R.mipmap.viewno);
+                select();
+                r3.setChecked(true);
                 break;
             case R.id.radio_4:
                 alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(3);
-                r1.setBackgroundResource(R.mipmap.meno);
-                r2.setBackgroundResource(R.mipmap.homeno);
-                r3.setBackgroundResource(R.mipmap.carsetno);
-                r4.setBackgroundResource(R.mipmap.view);
+                select();
+                r4.setChecked(true);
                 break;
         }
+    }
+
+    public void select(){
+        r1.setChecked(false);
+        r2.setChecked(false);
+        r3.setChecked(false);
+        r4.setChecked(false);
     }
 
     private void initMusic() {
@@ -337,6 +335,7 @@ public class MainActivity extends AppCompatActivity {
         Typeface tf = Typeface.createFromAsset(am, path);
         systemTime.setTypeface(tf);
         systemTime.setText(formatter.format(date));
+        firstFragment.initTime();
     }
     //添加模式
     public void tinajianview(View view) {

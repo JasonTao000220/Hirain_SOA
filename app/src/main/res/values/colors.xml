@@ -13,8 +13,13 @@
     <color name="black_20">#33000000</color>
     <color name="black_80">#cc000000</color>
     <color name="white_50">#80ffffff</color>
-    <color name="white_20">#ccffffff</color>
+    <color name="white_20">#33ffffff</color>
+    <color name="white_80">#ccffffff</color>
     <color name="white_10">#1affffff</color>
     <color name="black_16">#29000000</color>
+    <color name="color_c9cbd1">#C9CBD1</color>
+    <color name="color_c9acbd1">#222831</color>
+    <color name="black_30">#4d000000</color>
+    <color name="color_a5a5a5">#a5a5a5</color>
 
 </resources>
