@@ -91,7 +91,7 @@
             android:layout_height="60dp"
             android:layout_marginLeft="200dp"
             android:layout_marginTop="194dp"
-            android:src="@mipmap/yinlianglog50" />
+            android:src="@mipmap/yinlianglog0" />
 
         <TextView
             android:layout_width="148dp"
@@ -299,7 +299,7 @@
             tl:tl_textsize="24sp"
             android:layout_gravity="center_horizontal"
             tl:tl_bar_stroke_width="0dp"
-            tl:tl_indicator_color="@color/tm"
+            tl:tl_indicator_color="@color/dialog_start_bg"
             tl:tl_textSelectColor="@color/white"
             tl:tl_textUnselectColor="@color/white"
             tl:tl_indicator_anim_enable="true"
@@ -346,35 +346,36 @@
             android:textColor="#FFF"
             android:textSize="32sp" />
 
+
         <Button
             android:layout_toRightOf="@id/rm_adjust_tv"
-            android:layout_below="@id/rm_adjust_tv"
             android:id="@+id/jingshang"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_marginLeft="11dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="78dp"
             android:background="@drawable/rearview_mirror_selectortop"
             />
 
         <Button
             android:layout_below="@id/jingshang"
-            android:layout_toLeftOf="@id/jingshang"
+            android:layout_toLeftOf="@id/jingyou"
             android:id="@+id/jingzuo"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_marginRight="0dp"
+            android:layout_marginRight="115dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/rearview_mirror_selectorleft"
             />
 
         <Button
+
             android:layout_toRightOf="@id/rm_adjust_tv"
             android:layout_below="@id/jingshang"
             android:id="@+id/jingxia"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_marginLeft="11dp"
+            android:layout_marginLeft="60dp"
             android:layout_marginTop="121dp"
             android:background="@drawable/rearview_mirror_selectorbottom"
             />
@@ -389,6 +390,20 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/rearview_mirror_selectorright"
             />
+
+        <ImageView
+
+            android:id="@+id/rm_close_img"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="23dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/rm_set_bg"
+
+            />
+
 
     </RelativeLayout>
 <!--座椅-->

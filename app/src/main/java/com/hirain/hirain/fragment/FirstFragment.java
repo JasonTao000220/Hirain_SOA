@@ -350,6 +350,7 @@ public class FirstFragment extends Fragment {
                         }
                         myAdapter.notifyDataSetChanged();
 
+                        EventBus.getDefault().post(new EditModeEvent(modelItem.getModeName(),5));
                         //确认开启
                         ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,modelItem.getModeName()));
                     }

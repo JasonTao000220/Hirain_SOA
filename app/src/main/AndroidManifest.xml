@@ -18,11 +18,16 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.Logstract">
+
+        </activity>
+        <activity android:name=".LeftActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <service android:name=".service.MusicService"/>
         <service android:name=".service.DealUdpService"/>

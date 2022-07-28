@@ -24,7 +24,7 @@ public class Dialog extends android.app.Dialog  {
 
     public Dialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+       /* getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
@@ -39,6 +39,6 @@ public class Dialog extends android.app.Dialog  {
                 uiOptions |= 0x00001000;
                 getWindow().getDecorView().setSystemUiVisibility(uiOptions);
             }
-        });
+        });*/
     }
 }

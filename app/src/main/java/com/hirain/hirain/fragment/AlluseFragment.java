@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -21,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import static com.hirain.hirain.R.mipmap.bofang;
 import static com.hirain.hirain.R.mipmap.hshijing;
 import static com.hirain.hirain.R.mipmap.nodengguang;
 import static com.hirain.hirain.R.mipmap.nohshijing;
@@ -36,11 +39,11 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     private TextView modeStart;
     private TextView modeStop;
     //线路 1,2,3,4
-    private Button line1;
-    private Button line2;
-    private Button line3;
-    private Button line4;
     public boolean isPlay = false;
+    private RelativeLayout line1Rl,line3Rl,line2Rl,line4Rl;
+    private ImageView line1Iv,line2Iv,line3Iv,line4Iv;
+    private TextView line1Tv,line2Tv,line3Tv,line4Tv;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,16 +100,30 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
 
         modeStart = getActivity().findViewById(R.id.drive_mode_start);
         modeStop = getActivity().findViewById(R.id.drive_mode_stop);
-        line1 = getActivity().findViewById(R.id.drive_mode_line1);
-        line2 = getActivity().findViewById(R.id.drive_mode_line2);
-        line3 = getActivity().findViewById(R.id.drive_mode_line3);
-        line4 = getActivity().findViewById(R.id.drive_mode_line4);
+        //切换路线
+
+        line1Rl = getActivity().findViewById(R.id.drive_line1_rl);
+        line1Iv = getActivity().findViewById(R.id.drive_line1_iv);
+        line1Tv = getActivity().findViewById(R.id.drive_line1_tv);
+        line2Rl = getActivity().findViewById(R.id.drive_line2_rl);
+        line2Tv = getActivity().findViewById(R.id.drive_line2_tv);
+        line2Iv = getActivity().findViewById(R.id.drive_line2_iv);
+        line3Rl = getActivity().findViewById(R.id.drive_line3_rl);
+        line3Tv = getActivity().findViewById(R.id.drive_line3_tv);
+        line3Iv = getActivity().findViewById(R.id.drive_line3_iv);
+        line4Rl = getActivity().findViewById(R.id.drive_line4_rl);
+        line4Iv = getActivity().findViewById(R.id.drive_line4_iv);
+        line4Tv = getActivity().findViewById(R.id.drive_line4_tv);
+
+        line1Rl.setOnClickListener(this);
+        line2Rl.setOnClickListener(this);
+        line3Rl.setOnClickListener(this);
+        line4Rl.setOnClickListener(this);
+
         modeStart.setOnClickListener(this);
         modeStop.setOnClickListener(this);
-        line1.setOnClickListener(this);
-        line2.setOnClickListener(this);
-        line3.setOnClickListener(this);
-        line4.setOnClickListener(this);
+        selectLines(1);
+
 
     }
 
@@ -159,6 +176,41 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
         Log.i("wxy", "onStop: aa");
     }
 
+    //选择路线
+    public void selectLines(int lineNum){
+        line1Rl.setBackground(null);
+        line2Rl.setBackground(null);
+        line3Rl.setBackground(null);
+        line4Rl.setBackground(null);
+        line1Tv.setTextColor(getResources().getColor(R.color.color_cfcfcf));
+        line2Tv.setTextColor(getResources().getColor(R.color.color_cfcfcf));
+        line3Tv.setTextColor(getResources().getColor(R.color.color_cfcfcf));
+        line4Tv.setTextColor(getResources().getColor(R.color.color_cfcfcf));
+        switch (lineNum) {
+            case 1:
+                line1Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
+                line1Iv.setImageResource(R.mipmap.dirve_line1);
+                line1Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
+                break;
+            case 2:
+                line2Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
+                line2Iv.setImageResource(R.mipmap.drive_line2);
+                line2Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
+                break;
+            case 3:
+                line3Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
+                line3Iv.setImageResource(R.mipmap.drive_line3);
+                line3Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
+                break;
+            case 4:
+                line4Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
+                line4Iv.setImageResource(R.mipmap.drive_line4);
+                line4Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
+                break;
+        }
+
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -171,41 +223,30 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
                 rightVideo.pause();
                 leftVideo.pause();
                 break;
-            case R.id.drive_mode_line1:
+            case R.id.drive_line1_rl:
                 initData(R.raw.video6,R.raw.video3);
                 isPlay=false;
                 playVideo();
-                line1.setBackgroundResource(R.mipmap.yinliang);
-                line2.setBackgroundResource(nohshijing);
-                line3.setBackgroundResource(zuoyiquanbi);
-                line4.setBackgroundResource(nodengguang);
+                selectLines(1);
                 break;
-            case R.id.drive_mode_line2:
+            case R.id.drive_line2_rl:
                 initData(R.raw.video3,R.raw.video2);
                 isPlay=false;
                 playVideo();
-                line1.setBackgroundResource(R.mipmap.noyinliang);
-                line2.setBackgroundResource(hshijing);
-                line3.setBackgroundResource(zuoyiquanbi);
-                line4.setBackgroundResource(nodengguang);
+                selectLines(2);
                 break;
-            case R.id.drive_mode_line3:
+            case R.id.drive_line3_rl:
                 initData(R.raw.video2,R.raw.video3);
                 isPlay=false;
                 playVideo();
-                line1.setBackgroundResource(R.mipmap.noyinliang);
-                line2.setBackgroundResource(nohshijing);
-                line3.setBackgroundResource(R.mipmap.zuoyi);
-                line4.setBackgroundResource(nodengguang);
+                selectLines(3);
                 break;
-            case R.id.drive_mode_line4:
+            case R.id.drive_line4_rl:
+
                 initData(R.raw.video4,R.raw.video6);
                 isPlay=false;
                 playVideo();
-                line1.setBackgroundResource(R.mipmap.noyinliang);
-                line2.setBackgroundResource(nohshijing);
-                line3.setBackgroundResource(zuoyiquanbi);
-                line4.setBackgroundResource(R.mipmap.dengguang);
+                selectLines(4);
                 break;
         }
     }

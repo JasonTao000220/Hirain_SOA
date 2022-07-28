@@ -2,7 +2,7 @@ package com.hirain.hirain.bean.event;
 
 public class EditModeEvent {
     public  String modeName;
-    public  int editState;  // 0 开始编辑  1 保存编辑  2 取消编辑  3 另存新模式  4 新建新模式
+    public  int editState;  // 0 开始编辑  1 保存编辑  2 取消编辑  3 另存新模式  4 新建新模式 5开启新模式
 
 
     public EditModeEvent(String modeName, int editState) {

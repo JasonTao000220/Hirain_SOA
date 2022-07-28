@@ -14,5 +14,10 @@
     <string name="drive_mode_stop">停止</string>
     <string name="repeat_name">自定义名字已存在</string>
     <string name="mode_start">%s已开启</string>
+    <string name="rm_close_tip">后视镜未打开-不可操作</string>
+    <string name="drive_line1">通勤</string>
+    <string name="drive_line4">去加油站</string>
+    <string name="drive_line3">去商场</string>
+    <string name="drive_line2">去医院</string>
 
 </resources>

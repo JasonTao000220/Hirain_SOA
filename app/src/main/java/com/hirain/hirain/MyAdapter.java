@@ -46,12 +46,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
         holder.textlayout.setText(mList.get(position).getModeName());
+//        if(mList.get(position).isSel){
+////           holder.item.setBackgroundColor(context.getResources().getColor(R.color.white_50));
+//            holder.item.setBackgroundResource(R.drawable.shape_mode_white_20_item_5);
+//        }else {
+////            holder.item.setBackgroundColor(context.getResources().getColor(R.color.white_20));
+//            holder.item.setBackgroundResource(R.drawable.shape_mode_item_5);
+//        }
+
         if(mList.get(position).isSel){
-//            holder.item.setBackgroundColor(context.getResources().getColor(R.color.white_50));
             holder.item.setBackgroundResource(R.drawable.shape_mode_white_20_item_5);
         }else {
-//            holder.item.setBackgroundColor(context.getResources().getColor(R.color.white_20));
-            holder.item.setBackgroundResource(R.drawable.shape_mode_item_5);
+            holder.item.setBackgroundResource(R.color.tm);
         }
 
         holder.swipeMenuLayout.setSwipeeMenuMoveListener(new SwipeMenuLayout.SwipeeMenuMoveListener() {

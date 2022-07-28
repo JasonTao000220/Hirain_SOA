@@ -25,6 +25,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
@@ -52,6 +53,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import static android.media.AudioManager.ADJUST_SAME;
 import static com.hirain.hirain.R.mipmap.hshijing;
 import static com.hirain.hirain.R.mipmap.nodengguang;
 import static com.hirain.hirain.R.mipmap.nohshijing;
@@ -70,39 +72,39 @@ import static com.hirain.hirain.R.mipmap.yinlianglog0;
 import static com.hirain.hirain.R.mipmap.zuoyiquanbi;
 
 
-public class CarsetFragment extends Fragment {
+public class CarsetFragment extends Fragment implements View.OnClickListener {
     //交互
-    private FlatBufferBuilder fbb =new FlatBufferBuilder();
+    private FlatBufferBuilder fbb = new FlatBufferBuilder();
     private LocalSocket msocket = new LocalSocket();
     private ImageView yin;
 
     //切换按钮
-    private Button yinliang,hoshijing,zuoyi,dengguang;
+    private Button yinliang, hoshijing, zuoyi, dengguang;
 
     //模式调节
-    private RelativeLayout rly,rlh,rlz,rld;
+    private RelativeLayout rly, rlh, rlz, rld;
 
     //音量
     private AudioManager am;//音量调节器
     private ImageView yinlianglog;
-    private RadioGroup volume,zuoyouhsj;
-    private RadioButton vb0,vb1,vb2,vb3,vb4,vb5,vb6,vb7,vb8,vb9,vb10;
+    private RadioGroup volume, zuoyouhsj;
+    private RadioButton vb0, vb1, vb2, vb3, vb4, vb5, vb6, vb7, vb8, vb9, vb10;
 
     //后视镜
-    private Button jingshang,jingzuo,jingxia,jingyou;
-    private RadioButton zuohsj,youhsj;
-    private int rearview_position;
+    private Button jingshang, jingzuo, jingxia, jingyou;
+    private RadioButton zuohsj, youhsj;
+    private int rearview_position;  // 后视镜状态 1 打开  2是关闭
     private ImageView select_position;
     //后视镜状态
     private String[] rmType = {"打开", "关闭"};
     //左右后视镜
     private String[] rmDirection = {"左", "右"};
     //座椅
-    private String[] chairType = {"自定义", "前","中","后"};
+    private String[] chairType = {"自定义", "前", "中", "后"};
     //灯光模式
-    private String[] lightType = {"关闭", "长亮","解锁","闪烁"};
+    private String[] lightType = {"关闭", "长亮", "解锁", "闪烁"};
     //氛围灯模式
-    private String[] atmosphereLamp = {"关闭", "动感","舒缓","节奏","缤纷"};
+    private String[] atmosphereLamp = {"关闭", "动感", "舒缓", "节奏", "缤纷"};
 
     private SegmentTabLayout rmTypeTab;
     private SegmentTabLayout rmDirectionTab;
@@ -118,6 +120,8 @@ public class CarsetFragment extends Fragment {
     private TextView view;
     private LinearLayout saveModeLin;
 
+    //设置 是否即刻生效  新建和编辑是保存完之后才会生效
+    private boolean effectiveImmediately=true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,24 +130,18 @@ public class CarsetFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_carset, container, false);
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMessage(Object event){
-        if(event instanceof EditModeEvent){
-            EditModeEvent editModeEvent= (EditModeEvent) event;
+    public void getMessage(Object event) {
+        if (event instanceof EditModeEvent) {
+            EditModeEvent editModeEvent = (EditModeEvent) event;
             modeName = editModeEvent.getModeName();
             switch (editModeEvent.getEditState()) {
                 case 0:
-
+                    effectiveImmediately=false;
                     view.setVisibility(View.VISIBLE);
 
-                    yinliang.setBackgroundResource(R.mipmap.yinliang);
-                    hoshijing.setBackgroundResource(nohshijing);
-                    zuoyi.setBackgroundResource(zuoyiquanbi);
-                    dengguang.setBackgroundResource(nodengguang);
-                    rly.setVisibility(View.VISIBLE);
-                    rlh.setVisibility(View.GONE);
-                    rlz.setVisibility(View.GONE);
-                    rld.setVisibility(View.GONE);
+                    switchType(0);
                     upDateMode.setVisibility(View.VISIBLE);
                     modeNameTv.setVisibility(View.VISIBLE);
                     modeNameTv.setText(editModeEvent.getModeName());
@@ -152,8 +150,8 @@ public class CarsetFragment extends Fragment {
                     break;
                 case 1:
                     //保存编辑
-                    Log.i("wcu", "getMessage: "+customMode);
-                    MMkvUtils.getmInstance().encodeParcelable(modeName,customMode);
+                    Log.i("wcu", "getMessage: " + customMode);
+                    MMkvUtils.getmInstance().encodeParcelable(modeName, customMode);
                     upDateMode.setVisibility(View.GONE);
                     view.setVisibility(View.GONE);
                     modeNameTv.setVisibility(View.GONE);
@@ -167,128 +165,235 @@ public class CarsetFragment extends Fragment {
                     modeNameTv.setVisibility(View.GONE);
                     break;
                 case 4:
+                    effectiveImmediately=false;
+                    switchType(1);
+                    initData();
                     newMode.setVisibility(View.GONE);
                     upDateMode.setVisibility(View.VISIBLE);
+                    break;
+                case 5:
+                    switchType(0);
+                    modeNameTv.setVisibility(View.VISIBLE);
+                    modeNameTv.setText(editModeEvent.getModeName());
+                    configMode(editModeEvent.getModeName());
                     break;
 
             }
 
         }
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(!EventBus.getDefault().isRegistered(this)){
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
 
         initView();
-        customMode=new CustomMode();
+        customMode = new CustomMode();
 
         initListener();
+        initData();
 
     }
 
-    public void configMode(String key){
+    //进来获取各个选项的设置
+    private void initData() {
+        //获取系统的音量
+
+        switchVolume(0);
+        //获取后视镜的打开和关闭
+        rmDirectionTab.setCurrentTab(0);
+        rmTypeTab.setCurrentTab(0);
+        //获取座椅的模式
+        chairTypeTab.setCurrentTab(0);
+        //获取灯光的模式
+        lightTypeTab.setCurrentTab(0);
+        //获取氛围灯的模式
+        atmosphereLampTab.setCurrentTab(0);
+    }
+
+    public void configMode(String key) {
         customMode = MMkvUtils.getmInstance().decodeParcelable(key);
-        if(customMode==null){
+        if (customMode == null) {
             customMode = new CustomMode();
-        }else {
+        } else {
             lightTypeTab.setCurrentTab(customMode.getLightMode());
             atmosphereLampTab.setCurrentTab(customMode.getAtmosphereLamp());
             chairTypeTab.setCurrentTab(customMode.getChairMode());
             rmTypeTab.setCurrentTab(customMode.getRmType());
             rmDirectionTab.setCurrentTab(customMode.getRmStates());
-            Log.i("wxy", "configMode: "+customMode.getRmType()+"==="+customMode.getRmStates());
+            Log.i("wxy", "configMode: " + customMode.getRmType() + "===" + customMode.getRmStates());
             switchVolume(customMode.getVolume());
         }
     }
 
-    public void switchVolume(int volume){
+    //音量选择
+    public void switchVolume(int volume) {
         vb0.setBackgroundResource(R.color.tm);
+        vb1.setBackgroundResource(R.color.tm);
+        vb2.setBackgroundResource(R.color.tm);
+        vb3.setBackgroundResource(R.color.tm);
+        vb4.setBackgroundResource(R.color.tm);
+        vb5.setBackgroundResource(R.color.tm);
+        vb6.setBackgroundResource(R.color.tm);
+        vb7.setBackgroundResource(R.color.tm);
+        vb8.setBackgroundResource(R.color.tm);
+        vb9.setBackgroundResource(R.color.tm);
+        vb10.setBackgroundResource(R.color.tm);
         switch (volume) {
             case 0:
                 vb0.setBackgroundResource(R.drawable.shape_hubian);
                 yin.setImageResource(yin00);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog0);
                 break;
             case 10:
                 vb1.setBackgroundResource(R.drawable.shape_hubian);
                 yin.setImageResource(yin10);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog50);
                 break;
             case 20:
                 yin.setImageResource(yin20);
                 vb2.setBackgroundResource(R.drawable.shape_hubian);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog50);
                 break;
             case 30:
                 yin.setImageResource(yin30);
                 vb3.setBackgroundResource(R.drawable.shape_hubian);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog50);
                 break;
             case 40:
                 yin.setImageResource(yin40);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog50);
                 vb4.setBackgroundResource(R.drawable.shape_hubian);
                 break;
             case 50:
                 yin.setImageResource(yin50);
                 vb5.setBackgroundResource(R.drawable.shape_hubian);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog100);
                 break;
             case 60:
                 vb6.setBackgroundResource(R.drawable.shape_hubian);
                 yin.setImageResource(yin60);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog100);
                 break;
             case 70:
                 vb7.setBackgroundResource(R.drawable.shape_hubian);
                 yin.setImageResource(yin70);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog100);
                 break;
             case 80:
                 yin.setImageResource(yin80);
                 vb8.setBackgroundResource(R.drawable.shape_hubian);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog100);
                 break;
             case 90:
+                yinlianglog.setImageResource(R.mipmap.yinlianglog100);
                 yin.setImageResource(yin90);
                 vb9.setBackgroundResource(R.drawable.shape_hubian);
                 break;
             case 100:
-                vb10.setBackgroundResource(R.drawable.shape_hubian);
                 yin.setImageResource(yin100);
+                yinlianglog.setImageResource(R.mipmap.yinlianglog100);
+//                am.setStreamVolume(AudioManager.STREAM_SYSTEM, 100,  ADJUST_SAME);
+                vb10.setBackgroundResource(R.drawable.shape_hubian);
+
                 break;
 
         }
     }
 
+    public void switchType(int index){
+        switch (index) {
+            case 0:
+                //音量
+                yinliang.setBackgroundResource(R.mipmap.yinliang);
+                hoshijing.setBackgroundResource(nohshijing);
+                zuoyi.setBackgroundResource(zuoyiquanbi);
+                dengguang.setBackgroundResource(nodengguang);
+                rly.setVisibility(View.VISIBLE);
+                rlh.setVisibility(View.GONE);
+                rlz.setVisibility(View.GONE);
+                rld.setVisibility(View.GONE);
+                break;
+            case 1:
+                //后视镜
+                yinliang.setBackgroundResource(R.mipmap.noyinliang);
+                hoshijing.setBackgroundResource(hshijing);
+                zuoyi.setBackgroundResource(zuoyiquanbi);
+                dengguang.setBackgroundResource(nodengguang);
+                rly.setVisibility(View.GONE);
+                rlh.setVisibility(View.VISIBLE);
+                rlz.setVisibility(View.GONE);
+                rld.setVisibility(View.GONE);
+                break;
+            case 2:
+//                座椅
+                yinliang.setBackgroundResource(R.mipmap.noyinliang);
+                hoshijing.setBackgroundResource(nohshijing);
+                zuoyi.setBackgroundResource(R.mipmap.zuoyi);
+                dengguang.setBackgroundResource(nodengguang);
+                rly.setVisibility(View.GONE);
+                rlh.setVisibility(View.GONE);
+                rlz.setVisibility(View.VISIBLE);
+                rld.setVisibility(View.GONE);
+                break;
+            case 3:
+                //灯光
+                yinliang.setBackgroundResource(R.mipmap.noyinliang);
+                hoshijing.setBackgroundResource(nohshijing);
+                zuoyi.setBackgroundResource(zuoyiquanbi);
+                dengguang.setBackgroundResource(R.mipmap.dengguang);
+                rly.setVisibility(View.GONE);
+                rlh.setVisibility(View.GONE);
+                rlz.setVisibility(View.GONE);
+                rld.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
     private void initListener() {
+        jingxia.setOnClickListener(this);
+        jingshang.setOnClickListener(this);
+        jingzuo.setOnClickListener(this);
+        jingyou.setOnClickListener(this);
+
         //后视镜选择
-
-
-
         rmDirectionTab.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
-                Log.i("wxy", "onTabSelect: "+position);
+                Log.i("wxy", "onTabSelect: " + position);
 
-                if(rearview_position==2){
-                    ToastUtil.showToast(getActivity(),"请先打开后视镜");
-                }else {
-                    customMode.setRmStates(position);
-                }
-
+                //检查后视镜是否打开
+                checkRm();
+                customMode.setRmStates(position);
 
 
             }
 
             @Override
             public void onTabReselect(int position) {
-                Log.i("wxy", "onTabSelect:aaaas "+position);
+                Log.i("wxy", "onTabSelect:aaaas " + position);
             }
         });
         //后视镜打开/关闭
         rmTypeTab.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
-                rearview_position=position+1;
+                rearview_position = position + 1;
                 customMode.setRmType(position);
-                if(position==1){
+                if (position == 1) {
                     rmDirectionTab.setIndicatorColor(getResources().getColor(R.color.tm));
-                }else {
+                    jingshang.setBackgroundResource(R.mipmap.jingtop);
+                    jingxia.setBackgroundResource(R.mipmap.jingbutton);
+                    jingzuo.setBackgroundResource(R.mipmap.jingleft);
+                    jingyou.setBackgroundResource(R.mipmap.jingrede);
+                } else {
+                    jingshang.setBackgroundResource(R.drawable.rearview_mirror_selectortop);
+                    jingxia.setBackgroundResource(R.drawable.rearview_mirror_selectorbottom);
+                    jingzuo.setBackgroundResource(R.drawable.rearview_mirror_selectorleft);
+                    jingyou.setBackgroundResource(R.drawable.rearview_mirror_selectorright);
                     rmDirectionTab.setIndicatorColor(getResources().getColor(R.color.dialog_start_bg));
                 }
 
@@ -345,25 +450,26 @@ public class CarsetFragment extends Fragment {
                         new DialogUtils.onClickListener() {
                             @Override
                             public void leftClickListener() {
-
+                                effectiveImmediately=true;
                             }
 
                             @Override
                             public void rightClickListener(String text) {
+                                effectiveImmediately=true;
                                 Set<String> mode = MMkvUtils.getmInstance().decodeSet(MMkvUtils.MODE);
-                                if(mode==null){
-                                    mode=new HashSet<>();
+                                if (mode == null) {
+                                    mode = new HashSet<>();
                                 }
                                 boolean add = mode.add(text);
-                                if(!add){
+                                if (!add) {
                                     Random random = new Random(10);
                                     int i = random.nextInt();
-                                    mode.add(text+i);
+                                    mode.add(text + i);
                                 }
-                                MMkvUtils.getmInstance().encodeSet(MMkvUtils.MODE,mode);
+                                MMkvUtils.getmInstance().encodeSet(MMkvUtils.MODE, mode);
 
-                                MMkvUtils.getmInstance().encodeParcelable(text,customMode);
-                                EventBus.getDefault().post(new EditModeEvent(text,3));
+                                MMkvUtils.getmInstance().encodeParcelable(text, customMode);
+                                EventBus.getDefault().post(new EditModeEvent(text, 3));
                             }
                         });
 
@@ -377,14 +483,15 @@ public class CarsetFragment extends Fragment {
                         R.string.dialg_confirm, new DialogUtils.onClickListener() {
                             @Override
                             public void leftClickListener() {
-                                EventBus.getDefault().post(new EditModeEvent(modeName,2));
-
+                                EventBus.getDefault().post(new EditModeEvent(modeName, 2));
+                                effectiveImmediately=true;
 
                             }
 
                             @Override
                             public void rightClickListener(String text) {
-                                EventBus.getDefault().post(new EditModeEvent(modeName,1));
+                                effectiveImmediately=true;
+                                EventBus.getDefault().post(new EditModeEvent(modeName, 1));
 
                             }
                         });
@@ -395,10 +502,10 @@ public class CarsetFragment extends Fragment {
     private void initView() {
 
         //todo 切换按钮
-        yinliang=getActivity().findViewById(R.id.button_volume);
-        hoshijing=getActivity().findViewById(R.id.button_rearview);
-        zuoyi=getActivity().findViewById(R.id.button_seat);
-        dengguang=getActivity().findViewById(R.id.button_lamplight);
+        yinliang = getActivity().findViewById(R.id.button_volume);
+        hoshijing = getActivity().findViewById(R.id.button_rearview);
+        zuoyi = getActivity().findViewById(R.id.button_seat);
+        dengguang = getActivity().findViewById(R.id.button_lamplight);
 
         rmTypeTab = getActivity().findViewById(R.id.rm_type);
         rmDirectionTab = getActivity().findViewById(R.id.rm_direction);
@@ -418,46 +525,44 @@ public class CarsetFragment extends Fragment {
         atmosphereLampTab.setTabData(atmosphereLamp);
 
 
-
         //todo 模式布局
-        rly=getActivity().findViewById(R.id.carsetfragment_carset_layout_yinliang);
-        rlh=getActivity().findViewById(R.id.carsetfragment_seat_layout_rearview);
-        rlz=getActivity().findViewById(R.id.carsetfragment_lamplight_layout_seat);
-        rld=getActivity().findViewById(R.id.carsetfragment_lamplight_layout_lemp);
+        rly = getActivity().findViewById(R.id.carsetfragment_carset_layout_yinliang);
+        rlh = getActivity().findViewById(R.id.carsetfragment_seat_layout_rearview);
+        rlz = getActivity().findViewById(R.id.carsetfragment_lamplight_layout_seat);
+        rld = getActivity().findViewById(R.id.carsetfragment_lamplight_layout_lemp);
         rly.setVisibility(View.VISIBLE);
         rlh.setVisibility(View.GONE);
         rlz.setVisibility(View.GONE);
         rld.setVisibility(View.GONE);
         //todo 音量调节
-        yin=getActivity().findViewById(R.id.yin);
-        yinlianglog=getActivity().findViewById(R.id.yinlianglog);
-        volume=getActivity().findViewById(R.id.volume);
-        zuoyouhsj=getActivity().findViewById(R.id.zuoyouhsj);
-        vb0=getActivity().findViewById(R.id.volume0);
-        vb1=getActivity().findViewById(R.id.volume_10);
-        vb2=getActivity().findViewById(R.id.volume_20);
-        vb3=getActivity().findViewById(R.id.volume_30);
-        vb4=getActivity().findViewById(R.id.volume_40);
-        vb5=getActivity().findViewById(R.id.volume_50);
-        vb6=getActivity().findViewById(R.id.volume_60);
-        vb7=getActivity().findViewById(R.id.volume_70);
-        vb8=getActivity().findViewById(R.id.volume_80);
-        vb9=getActivity().findViewById(R.id.volume_90);
-        vb10=getActivity().findViewById(R.id.volume_100);
+        yin = getActivity().findViewById(R.id.yin);
+        yinlianglog = getActivity().findViewById(R.id.yinlianglog);
+        volume = getActivity().findViewById(R.id.volume);
+        zuoyouhsj = getActivity().findViewById(R.id.zuoyouhsj);
+        vb0 = getActivity().findViewById(R.id.volume0);
+        vb1 = getActivity().findViewById(R.id.volume_10);
+        vb2 = getActivity().findViewById(R.id.volume_20);
+        vb3 = getActivity().findViewById(R.id.volume_30);
+        vb4 = getActivity().findViewById(R.id.volume_40);
+        vb5 = getActivity().findViewById(R.id.volume_50);
+        vb6 = getActivity().findViewById(R.id.volume_60);
+        vb7 = getActivity().findViewById(R.id.volume_70);
+        vb8 = getActivity().findViewById(R.id.volume_80);
+        vb9 = getActivity().findViewById(R.id.volume_90);
+        vb10 = getActivity().findViewById(R.id.volume_100);
 
         //todo 后视镜
 
 
-
         //todo 左右后视镜切换
-        zuohsj=getActivity().findViewById(R.id.zuohoushijing);
-        youhsj=getActivity().findViewById(R.id.youhoushijing);
-        jingxia=getActivity().findViewById(R.id.jingxia);
+        zuohsj = getActivity().findViewById(R.id.zuohoushijing);
+        youhsj = getActivity().findViewById(R.id.youhoushijing);
+        jingxia = getActivity().findViewById(R.id.jingxia);
+        jingshang = getActivity().findViewById(R.id.jingshang);
+        jingzuo = getActivity().findViewById(R.id.jingzuo);
+        jingyou = getActivity().findViewById(R.id.jingyou);
+        am = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);//获取音量调节器对象
 
-
-
-
-        am= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);//获取音量调节器对象
     }
 
 
@@ -470,57 +575,30 @@ public class CarsetFragment extends Fragment {
         yinliang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                yinliang.setBackgroundResource(R.mipmap.yinliang);
-                hoshijing.setBackgroundResource(nohshijing);
-                zuoyi.setBackgroundResource(zuoyiquanbi);
-                dengguang.setBackgroundResource(nodengguang);
-                rly.setVisibility(View.VISIBLE);
-                rlh.setVisibility(View.GONE);
-                rlz.setVisibility(View.GONE);
-                rld.setVisibility(View.GONE);
+             switchType(0);
             }
         });
         //后视镜
         hoshijing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                yinliang.setBackgroundResource(R.mipmap.noyinliang);
-                hoshijing.setBackgroundResource(hshijing);
-                zuoyi.setBackgroundResource(zuoyiquanbi);
-                dengguang.setBackgroundResource(nodengguang);
-                rly.setVisibility(View.GONE);
-                rlh.setVisibility(View.VISIBLE);
-                rlz.setVisibility(View.GONE);
-                rld.setVisibility(View.GONE);
+                switchType(1);
 
             }
         });
+
         //座椅
         zuoyi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                yinliang.setBackgroundResource(R.mipmap.noyinliang);
-                hoshijing.setBackgroundResource(nohshijing);
-                zuoyi.setBackgroundResource(R.mipmap.zuoyi);
-                dengguang.setBackgroundResource(nodengguang);
-                rly.setVisibility(View.GONE);
-                rlh.setVisibility(View.GONE);
-                rlz.setVisibility(View.VISIBLE);
-                rld.setVisibility(View.GONE);
+              switchType(2);
             }
         });
         //灯光
         dengguang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                yinliang.setBackgroundResource(R.mipmap.noyinliang);
-                hoshijing.setBackgroundResource(nohshijing);
-                zuoyi.setBackgroundResource(zuoyiquanbi);
-                dengguang.setBackgroundResource(R.mipmap.dengguang);
-                rly.setVisibility(View.GONE);
-                rlh.setVisibility(View.GONE);
-                rlz.setVisibility(View.GONE);
-                rld.setVisibility(View.VISIBLE);
+                switchType(3);
 
             }
         });
@@ -528,196 +606,44 @@ public class CarsetFragment extends Fragment {
         volume.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int a=0;
-                switch (i){
+                int a = 0;
+
+                switch (i) {
                     case R.id.volume0:
-                        a=0;
-                        yin.setImageResource(yin00);
-                        yinlianglog.setImageResource(yinlianglog0);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,0,AudioManager.FLAG_SHOW_UI);
-                        vb0.setBackgroundResource(R.drawable.shape_hubian);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 0;
                         break;
                     case R.id.volume_10:
-                        a=10;
-                        yin.setImageResource(yin10);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,10,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 10;
                         break;
                     case R.id.volume_20:
-                        a=20;
-                        yin.setImageResource(yin20);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,20,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb2.setBackgroundResource(R.drawable.shape_hubian);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 20;
                         break;
                     case R.id.volume_30:
-                        a=30;
-                        yin.setImageResource(yin30);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,30,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 30;
                         break;
                     case R.id.volume_40:
-                        a=40;
-                        yin.setImageResource(yin40);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog50);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,40,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 40;
                         break;
                     case R.id.volume_50:
-                        a=50;
-                        yin.setImageResource(yin50);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,50,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 50;
                         break;
                     case R.id.volume_60:
-                        a=60;
-                        yin.setImageResource(yin60);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,60,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 60;
                         break;
                     case R.id.volume_70:
-                        a=70;
-                        yin.setImageResource(yin70);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,70,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 70;
                         break;
                     case R.id.volume_80:
-                        a=80;
-                        yin.setImageResource(yin80);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,80,0);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 80;
                         break;
                     case R.id.volume_90:
-                        a=90;
-                        yin.setImageResource(yin90);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,90,AudioManager.FLAG_SHOW_UI);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.drawable.shape_hubian);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.color.tm);
+                        a = 90;
                         break;
                     case R.id.volume_100:
-                        a=100;
-                        yin.setImageResource(yin100);
-                        yinlianglog.setImageResource(R.mipmap.yinlianglog100);
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC,100,AudioManager.FLAG_SHOW_UI);
-                        vb0.setBackgroundResource(R.color.tm);
-                        vb9.setBackgroundResource(R.color.tm);
-                        vb2.setBackgroundResource(R.color.tm);
-                        vb3.setBackgroundResource(R.color.tm);
-                        vb4.setBackgroundResource(R.color.tm);
-                        vb5.setBackgroundResource(R.color.tm);
-                        vb6.setBackgroundResource(R.color.tm);
-                        vb7.setBackgroundResource(R.color.tm);
-                        vb8.setBackgroundResource(R.color.tm);
-                        vb1.setBackgroundResource(R.color.tm);
-                        vb10.setBackgroundResource(R.drawable.shape_hubian);
+                        a = 100;
                         break;
                 }
+                switchVolume(a);
                 customMode.setVolume(a);
             }
         });
@@ -727,28 +653,33 @@ public class CarsetFragment extends Fragment {
 
         //Todo 调节左右后视镜
         //rearview_position=1代表选择左后视镜 2代表选择右后视镜
-        zuoyouhsj.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
-                    case R.id.zuohoushijing:
-                      rearview_position=1;
-                    break;
-                    case R.id.youhoushijing:
-                      rearview_position=2;
-                    break;
-                }
-            }
-        });
+    }
+
+    //检查后视镜是否关闭
+    public void checkRm() {
+        if (rearview_position == 2) {
+            ToastUtil.showToast(getActivity(), getResources().getString(R.string.rm_close_tip));
+        }
 
 
+    }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.jingshang:
+                checkRm();
+                break;
+            case R.id.jingxia:
+                checkRm();
+                break;
+            case R.id.jingzuo:
+                checkRm();
+                break;
+            case R.id.jingyou:
+                checkRm();
+                break;
 
-
-
-
-
-
-
+        }
     }
 }
