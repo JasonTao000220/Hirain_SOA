@@ -476,6 +476,17 @@ public class FirstFragment extends Fragment {
 
                     @Override
                     public void rightClickListener(String text) {
+
+                        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage("com.hirain.lefthirain");
+
+                        if (intent != null) {
+
+
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                            startActivity(intent);
+                        }
+
                         //确认开启
                         ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"展示模式"));
 

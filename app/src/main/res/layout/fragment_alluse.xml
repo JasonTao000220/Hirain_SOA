@@ -54,7 +54,7 @@
             android:id="@+id/drive_line1_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/dirve_line1"
+            android:src="@mipmap/drive_line4"
             android:layout_centerVertical="true"
             android:layout_marginLeft="47dp"
             />
@@ -83,7 +83,7 @@
             android:id="@+id/drive_line2_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/drive_line2"
+            android:src="@mipmap/dirve_line1"
             android:layout_centerVertical="true"
             android:layout_marginLeft="47dp"
             />
@@ -113,7 +113,7 @@
             android:id="@+id/drive_line3_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/drive_line3"
+            android:src="@mipmap/drive_line2"
             android:layout_centerVertical="true"
             android:layout_marginLeft="47dp"
             />
@@ -141,7 +141,7 @@
             android:id="@+id/drive_line4_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/drive_line4"
+            android:src="@mipmap/drive_line3"
             android:layout_centerVertical="true"
             android:layout_marginLeft="47dp"
             />

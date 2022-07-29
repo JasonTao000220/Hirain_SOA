@@ -186,25 +186,30 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
         line2Tv.setTextColor(getResources().getColor(R.color.color_cfcfcf));
         line3Tv.setTextColor(getResources().getColor(R.color.color_cfcfcf));
         line4Tv.setTextColor(getResources().getColor(R.color.color_cfcfcf));
+        line4Iv.setImageResource(R.mipmap.dirve_line1);
+        line2Iv.setImageResource(R.mipmap.drive_line2);
+        line3Iv.setImageResource(R.mipmap.drive_line3);
+        line1Iv.setImageResource(R.mipmap.drive_line4);
         switch (lineNum) {
             case 1:
                 line1Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
-                line1Iv.setImageResource(R.mipmap.dirve_line1);
+                line1Iv.setImageResource(R.mipmap.drive_line4_sel);
                 line1Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
+
                 break;
             case 2:
                 line2Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
-                line2Iv.setImageResource(R.mipmap.drive_line2);
+                line2Iv.setImageResource(R.mipmap.drive_line2_sel);
                 line2Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
                 break;
             case 3:
                 line3Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
-                line3Iv.setImageResource(R.mipmap.drive_line3);
+                line3Iv.setImageResource(R.mipmap.drive_line3_sel);
                 line3Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
                 break;
             case 4:
                 line4Rl.setBackgroundResource(R.mipmap.dirve_line_bg);
-                line4Iv.setImageResource(R.mipmap.drive_line4);
+                line4Iv.setImageResource(R.mipmap.dirve_line1);
                 line4Tv.setTextColor(getResources().getColor(R.color.color_8fd8f6));
                 break;
         }

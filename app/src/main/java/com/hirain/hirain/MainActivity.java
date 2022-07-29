@@ -8,9 +8,13 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
+import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -111,15 +115,24 @@ public class MainActivity extends AppCompatActivity {
             init();
         }
     };
-
+/*    public static boolean isRotationSupported(Context context) {
+                 PackageManager pm = context.getPackageManager();
+                 return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)
+                         && pm.hasSystemFeature(PackageManager.FEATURE_SCREEN_PORTRAIT)
+                         && pm.hasSystemFeature(PackageManager.FEATURE_SCREEN_LANDSCAPE);
+             }
+    public static boolean isRotationLockToggleSupported(Context context) {
+                 return isRotationSupported(context)
+                         && context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
+             }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         if(!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().register(this);
         }
-
 
         initMusic();
         //todo 按钮
@@ -183,7 +196,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        radioGroup.setVisibility(View.GONE);
+        selectMenu(R.id.radio_4);
 
          radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
              @Override
@@ -235,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
                 r1.setChecked(true);
                 break;
             case R.id.radio_2:
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
                 alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(1);
@@ -242,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 r2.setChecked(true);
                 break;
             case R.id.radio_3:
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
                 alluseFragment.playVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(2);
@@ -249,7 +265,8 @@ public class MainActivity extends AppCompatActivity {
                 r3.setChecked(true);
                 break;
             case R.id.radio_4:
-                alluseFragment.pauseVideo();
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(3);
                 select();
