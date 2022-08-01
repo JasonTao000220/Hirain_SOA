@@ -15,6 +15,8 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
+import android.net.LocalSocket;
+import android.net.LocalSocketAddress;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +29,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.flatbuffers.FlatBufferBuilder;
 import com.hirain.hirain.bean.event.EditModeEvent;
 import com.hirain.hirain.dialog.DialogUtils;
+import com.hirain.hirain.flaterbuffers.hsj.ExtMirrorServicelnfo;
 import com.hirain.hirain.fragment.AlluseFragment;
 import com.hirain.hirain.fragment.CarsetFragment;
 import com.hirain.hirain.fragment.FirstFragment;
@@ -39,6 +43,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,16 +58,16 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     //todo 按钮 自定义模式添加按钮， 另存新模式，  保存；
-    private Button tianjiaview,newview,baoc;
+    private Button tianjiaview, newview, baoc;
 
     //todo 二级联动
     private ViewPager viewPager;
     public RadioGroup radioGroup;
-    private List<Fragment> fragmentList=new ArrayList<>();
-    private RadioButton r1,r2,r3,r4;
+    private List<Fragment> fragmentList = new ArrayList<>();
+    private RadioButton r1, r2, r3, r4;
     //是否是正在编辑自定义模式
-    private boolean isEdit=false;
-    public static List<Song> songList=new ArrayList<>();
+    private boolean isEdit = false;
+    public static List<Song> songList = new ArrayList<>();
     //系统时间
     private TextView systemTime;
     private Timer timer;
@@ -68,27 +75,29 @@ public class MainActivity extends AppCompatActivity {
     private FirstFragment firstFragment;
     private CarsetFragment carsetFragment;
     private UserFragment userFragment;
+    private FlatBufferBuilder fbb = new FlatBufferBuilder();
+    private LocalSocket msocket = new LocalSocket();
 
-    public static List<Song> getSongList(){
+    public static List<Song> getSongList() {
 
         return songList;
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMessage(Object event){
-        if(event instanceof EditModeEvent){
+    public void getMessage(Object event) {
+        if (event instanceof EditModeEvent) {
 
-            EditModeEvent editModeEvent= (EditModeEvent) event;
+            EditModeEvent editModeEvent = (EditModeEvent) event;
             switch (editModeEvent.getEditState()) {
                 case 0:
                 case 4:
                     select();
                     r2.setChecked(true);
-                    isEdit=true;
+                    isEdit = true;
                     break;
                 case 1:
-                    isEdit=false;
+                    isEdit = false;
                     viewPager.setCurrentItem(0);
                     select();
                     r1.setChecked(true);
@@ -96,60 +105,60 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
                 case 2:
-                    isEdit=false;
+                    isEdit = false;
                     break;
                 case 3:
-                    isEdit=false;
+                    isEdit = false;
                     break;
 
             }
 
 
-
         }
     }
-    Handler handler=new Handler(){
+
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             init();
         }
     };
-/*    public static boolean isRotationSupported(Context context) {
-                 PackageManager pm = context.getPackageManager();
-                 return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)
-                         && pm.hasSystemFeature(PackageManager.FEATURE_SCREEN_PORTRAIT)
-                         && pm.hasSystemFeature(PackageManager.FEATURE_SCREEN_LANDSCAPE);
-             }
-    public static boolean isRotationLockToggleSupported(Context context) {
-                 return isRotationSupported(context)
-                         && context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
-             }*/
+
+    /*    public static boolean isRotationSupported(Context context) {
+                     PackageManager pm = context.getPackageManager();
+                     return pm.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)
+                             && pm.hasSystemFeature(PackageManager.FEATURE_SCREEN_PORTRAIT)
+                             && pm.hasSystemFeature(PackageManager.FEATURE_SCREEN_LANDSCAPE);
+                 }
+        public static boolean isRotationLockToggleSupported(Context context) {
+                     return isRotationSupported(context)
+                             && context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
+                 }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
-        if(!EventBus.getDefault().isRegistered(this)){
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
 
         initMusic();
         //todo 按钮
-        tianjiaview=findViewById(R.id.firsttianjia);
-        newview=findViewById(R.id.newview);
-        baoc=findViewById(R.id.baoc);
+        tianjiaview = findViewById(R.id.firsttianjia);
+        newview = findViewById(R.id.newview);
+        baoc = findViewById(R.id.baoc);
 
         //todo 初始化控件
         //按钮切换
-        r1=findViewById(R.id.radio_1);
-        r2=findViewById(R.id.radio_2);
-        r3=findViewById(R.id.radio_3);
-        r4=findViewById(R.id.radio_4);
+        r1 = findViewById(R.id.radio_1);
+        r2 = findViewById(R.id.radio_2);
+        r3 = findViewById(R.id.radio_3);
+        r4 = findViewById(R.id.radio_4);
         systemTime = findViewById(R.id.system_time);
         //二级联动
-        viewPager=findViewById(R.id.viewpaget_main);
-        radioGroup=findViewById(R.id.radiogroup_main);
+        viewPager = findViewById(R.id.viewpaget_main);
+        radioGroup = findViewById(R.id.radiogroup_main);
 
 
         //四个fragment
@@ -199,33 +208,34 @@ public class MainActivity extends AppCompatActivity {
         radioGroup.setVisibility(View.GONE);
         selectMenu(R.id.radio_4);
 
-         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-             @Override
-             public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
-                 if(isEdit){
-                     //在编辑模式下，弹窗提示
-                     DialogUtils.customView(MainActivity.this, R.string.edit_mode_tip, R.string.dialog_cancle,
-                             R.string.dialg_confirm, new DialogUtils.onClickListener() {
-                                 @Override
-                                 public void leftClickListener() {
-                                     EventBus.getDefault().post(new EditModeEvent("aa",2));
-                                     isEdit=false;
-                                     selectMenu (i);
-                                 }
-                                 public void rightClickListener(String text) {
-                                     EventBus.getDefault().post(new EditModeEvent("",1));
-                                     isEdit=false;
-                                     selectMenu (i);
-                                 }
-                             });
+                if (isEdit) {
+                    //在编辑模式下，弹窗提示
+                    DialogUtils.customView(MainActivity.this, R.string.edit_mode_tip, R.string.dialog_cancle,
+                            R.string.dialg_confirm, new DialogUtils.onClickListener() {
+                                @Override
+                                public void leftClickListener() {
+                                    EventBus.getDefault().post(new EditModeEvent("aa", 2));
+                                    isEdit = false;
+                                    selectMenu(i);
+                                }
 
-                 }else {
-                     selectMenu (i);
-                 }
+                                public void rightClickListener(String text) {
+                                    EventBus.getDefault().post(new EditModeEvent("", 1));
+                                    isEdit = false;
+                                    selectMenu(i);
+                                }
+                            });
 
-             }
-         });
+                } else {
+                    selectMenu(i);
+                }
+
+            }
+        });
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -233,14 +243,50 @@ public class MainActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(0);
             }
         };
-        timer.schedule(timerTask,1000,30000);
+        timer.schedule(timerTask, 1000, 10000);
+        sendMsg();
+    }
+
+
+    public void sendMsg() {
+
+
+        try {
+            int hsj1 = fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
+            int hsj2 = fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
+            int hsj3 = fbb.createByteVector(ByteBuffer.allocateDirect(0x01));;
+            int hsj4 = fbb.createByteVector(ByteBuffer.allocateDirect(0x00));
+
+            int mus = ExtMirrorServicelnfo.createExtMirrorServicelnfo(fbb, hsj1, hsj2, hsj3, hsj4);
+            fbb.finish(mus);
+
+            byte[] demarr = fbb.sizedByteArray();
+            Log.e("flatbuffers", demarr + "");
+
+            short sizen = (short) (demarr.length);
+            short name = 0x01;
+
+            byte[] bufnn = new byte[]{0x52, 0x4f, 0x41, 0x00, (byte) (name >> 8), (byte) name, (byte) (sizen >> 8), (byte) sizen};
+
+            byte[] musisn = new byte[bufnn.length + demarr.length];
+            System.arraycopy(bufnn, 0, musisn, 0, bufnn.length);
+            System.arraycopy(demarr, 0, musisn, bufnn.length, demarr.length);
+
+            LocalSocketAddress address = new LocalSocketAddress("/data/data/com.hirain.hirain/defauit.sock", LocalSocketAddress.Namespace.ABSTRACT);
+            msocket.connect(address);
+            OutputStream data = msocket.getOutputStream();
+            data.write(123);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("socket", "连接失败");
+        }
 
     }
 
 
-    public  void selectMenu(int i){
+    public void selectMenu(int i) {
 
-        switch (i){
+        switch (i) {
             case R.id.radio_1:
                 alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.GONE);
@@ -249,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
                 r1.setChecked(true);
                 break;
             case R.id.radio_2:
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+
                 alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(1);
@@ -257,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                 r2.setChecked(true);
                 break;
             case R.id.radio_3:
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+
                 alluseFragment.playVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(2);
@@ -265,8 +311,8 @@ public class MainActivity extends AppCompatActivity {
                 r3.setChecked(true);
                 break;
             case R.id.radio_4:
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//                alluseFragment.pauseVideo();
+
+                alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(3);
                 select();
@@ -275,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void select(){
+    public void select() {
         r1.setChecked(false);
         r2.setChecked(false);
         r3.setChecked(false);
@@ -307,20 +353,21 @@ public class MainActivity extends AppCompatActivity {
         songList.add(song3);
         songList.add(song4);
     }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         //todo 隐藏导航栏和状态栏
-        if (hasFocus){
-            View decorView =getWindow().getDecorView();
+        if (hasFocus) {
+            View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            |View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            |View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                             //隐藏导航栏和状态栏
-                            |View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            |View.SYSTEM_UI_FLAG_FULLSCREEN);
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         }
     }
@@ -333,12 +380,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //todo SharedPreferences存储
-                SharedPreferences sharedPreferences = getSharedPreferences("sptest",MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString("view1","1/dsadasda");
-                editor.putInt("view101",23123);
+                SharedPreferences sharedPreferences = getSharedPreferences("sptest", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("view1", "1/dsadasda");
+                editor.putInt("view101", 23123);
                 editor.commit();
-                Log.e("TAG",sharedPreferences.getString("view1","null"));
+                Log.e("TAG", sharedPreferences.getString("view1", "null"));
             }
         });
     }
@@ -348,12 +395,15 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         Date date = new Date(currentTime);
         String path = "fonts" + File.separator + "digital-7.ttf";
-        AssetManager am =getAssets();
+        AssetManager am = getAssets();
         Typeface tf = Typeface.createFromAsset(am, path);
         systemTime.setTypeface(tf);
         systemTime.setText(formatter.format(date));
         firstFragment.initTime();
+
+//        sendMsg();
     }
+
     //添加模式
     public void tinajianview(View view) {
 
@@ -363,8 +413,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeMessages(0);
-        handler=null;
+        handler = null;
         timer.cancel();
-        timer=null;
+        timer = null;
     }
 }

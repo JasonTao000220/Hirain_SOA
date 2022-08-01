@@ -16,7 +16,7 @@
         android:hardwareAccelerated="false"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+
             android:theme="@style/AppTheme.Logstract">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

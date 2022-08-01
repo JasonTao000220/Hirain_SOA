@@ -40,9 +40,9 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     private TextView modeStop;
     //线路 1,2,3,4
     public boolean isPlay = false;
-    private RelativeLayout line1Rl,line3Rl,line2Rl,line4Rl;
-    private ImageView line1Iv,line2Iv,line3Iv,line4Iv;
-    private TextView line1Tv,line2Tv,line3Tv,line4Tv;
+    private RelativeLayout line1Rl, line3Rl, line2Rl, line4Rl;
+    private ImageView line1Iv, line2Iv, line3Iv, line4Iv;
+    private TextView line1Tv, line2Tv, line3Tv, line4Tv;
 
 
     @Override
@@ -57,7 +57,7 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         EventBus.getDefault().register(this);
         initView();
-        initData(R.raw.video6,R.raw.video3);
+        initData(R.raw.video6, R.raw.video3);
         initListener();
     }
 
@@ -76,11 +76,11 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void initData(int leftPath,int rightPath) {
-        if(leftVideo.isPlaying()){
+    private void initData(int leftPath, int rightPath) {
+        if (leftVideo.isPlaying()) {
             leftVideo.pause();
         }
-        if(rightVideo.isPlaying()){
+        if (rightVideo.isPlaying()) {
             rightVideo.pause();
         }
         Uri uri = Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + leftPath);
@@ -142,7 +142,7 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMessage(Object event){
+    public void getMessage(Object event) {
         Log.i("wxy", "getMessage: AASDASDA");
         /*if(event==1){
             playVideo();
@@ -152,9 +152,13 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     }
 
     public void pauseVideo() {
+        if (rightVideo != null) {
+            rightVideo.pause();
+        }
+        if (leftVideo != null) {
+            leftVideo.pause();
+        }
 
-        rightVideo.pause();
-        leftVideo.pause();
 
     }
 
@@ -177,7 +181,7 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     }
 
     //选择路线
-    public void selectLines(int lineNum){
+    public void selectLines(int lineNum) {
         line1Rl.setBackground(null);
         line2Rl.setBackground(null);
         line3Rl.setBackground(null);
@@ -229,27 +233,27 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
                 leftVideo.pause();
                 break;
             case R.id.drive_line1_rl:
-                initData(R.raw.video6,R.raw.video3);
-                isPlay=false;
+                initData(R.raw.video6, R.raw.video3);
+                isPlay = false;
                 playVideo();
                 selectLines(1);
                 break;
             case R.id.drive_line2_rl:
-                initData(R.raw.video3,R.raw.video2);
-                isPlay=false;
+                initData(R.raw.video3, R.raw.video2);
+                isPlay = false;
                 playVideo();
                 selectLines(2);
                 break;
             case R.id.drive_line3_rl:
-                initData(R.raw.video2,R.raw.video3);
-                isPlay=false;
+                initData(R.raw.video2, R.raw.video3);
+                isPlay = false;
                 playVideo();
                 selectLines(3);
                 break;
             case R.id.drive_line4_rl:
 
-                initData(R.raw.video4,R.raw.video6);
-                isPlay=false;
+                initData(R.raw.video4, R.raw.video6);
+                isPlay = false;
                 playVideo();
                 selectLines(4);
                 break;
