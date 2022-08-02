@@ -1,4 +1,4 @@
-package com.hirain.hirain;
+package com.hirain.hirain.left;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.hirain.hirain.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

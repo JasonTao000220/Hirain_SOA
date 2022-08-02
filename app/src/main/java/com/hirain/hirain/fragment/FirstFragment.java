@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hirain.hirain.MainActivity;
+import com.hirain.hirain.bean.CustomMode;
 import com.hirain.hirain.bean.ModelItem;
 import com.hirain.hirain.bean.UdpBean;
 import com.hirain.hirain.dialog.DialogUtils;
@@ -349,7 +350,7 @@ public class FirstFragment extends Fragment {
 
                         }
                         myAdapter.notifyDataSetChanged();
-
+                        startLeft(2,null);
                         EventBus.getDefault().post(new EditModeEvent(modelItem.getModeName(),5));
                         //确认开启
                         ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,modelItem.getModeName()));
@@ -477,16 +478,17 @@ public class FirstFragment extends Fragment {
                     @Override
                     public void rightClickListener(String text) {
 
-                        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage("com.hirain.lefthirain");
+//                        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage("com.hirain.lefthirain.ShowModeActivity");
+//
+//                        if (intent != null) {
+//
+//
+//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                            startActivity(intent);
+//                        }
 
-                        if (intent != null) {
-
-
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                            startActivity(intent);
-                        }
-
+                        startLeft(1,null);
                         //确认开启
                         ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"展示模式"));
 
@@ -498,6 +500,34 @@ public class FirstFragment extends Fragment {
         });
 
 
+    }
+
+    /*
+    *
+    *  type  1: 展示模式
+    *  type  2: 默认模式
+    * */
+    private void startLeft(int type, CustomMode customMode) {
+        String path="com.example.lefthirain.MainActivity";
+        Intent intent = new Intent();
+        if(type==1){
+            intent.putExtra("type",1);
+        }else {
+            intent.putExtra("type",2);
+        }
+        ComponentName componentName = new ComponentName("com.hirain.lefthirain", path);//这里是 包名 以及 页面类的全称
+
+
+        if(customMode!=null){
+            intent.putExtra("data",customMode);
+        }
+
+        intent.setComponent(componentName);
+
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        startActivity(intent);
     }
 
 

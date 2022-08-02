@@ -205,8 +205,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        radioGroup.setVisibility(View.GONE);
-        selectMenu(R.id.radio_4);
+        radioGroup.setVisibility(View.VISIBLE);
+//        selectMenu(R.id.radio_4);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
