@@ -1,6 +1,7 @@
 package com.hirain.hirain;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -13,8 +14,11 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.hardware.display.DisplayManager;
+import android.media.MediaMetadataRetriever;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.Build;
@@ -22,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -54,7 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class MainActivity extends AppCompatActivity {
 
     //todo 按钮 自定义模式添加按钮， 另存新模式，  保存；
@@ -72,11 +77,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView systemTime;
     private Timer timer;
     private AlluseFragment alluseFragment;
-    private FirstFragment firstFragment;
-    private CarsetFragment carsetFragment;
-    private UserFragment userFragment;
+    public FirstFragment firstFragment;
+    public CarsetFragment carsetFragment;
+    public UserFragment userFragment;
     private FlatBufferBuilder fbb = new FlatBufferBuilder();
     private LocalSocket msocket = new LocalSocket();
+    public MyPresentation myPresentation;
 
     public static List<Song> getSongList() {
 
@@ -98,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 1:
                     isEdit = false;
-                    viewPager.setCurrentItem(0);
                     select();
                     r1.setChecked(true);
 
@@ -135,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                      return isRotationSupported(context)
                              && context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
                  }*/
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +148,12 @@ public class MainActivity extends AppCompatActivity {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+
+
+        DisplayManager displayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+        myPresentation = new MyPresentation(this, displayManager.getDisplay(1));
+        myPresentation.show();
+
 
         initMusic();
         //todo 按钮
@@ -295,7 +307,7 @@ public class MainActivity extends AppCompatActivity {
                 r1.setChecked(true);
                 break;
             case R.id.radio_2:
-
+                carsetFragment.effectiveImmediately=true;
                 alluseFragment.pauseVideo();
                 systemTime.setVisibility(View.VISIBLE);
                 viewPager.setCurrentItem(1);
@@ -400,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
         systemTime.setTypeface(tf);
         systemTime.setText(formatter.format(date));
         firstFragment.initTime();
-
+        myPresentation.setTime(formatter.format(date));
 //        sendMsg();
     }
 
@@ -416,5 +428,6 @@ public class MainActivity extends AppCompatActivity {
         handler = null;
         timer.cancel();
         timer = null;
+        myPresentation.dismiss();
     }
 }

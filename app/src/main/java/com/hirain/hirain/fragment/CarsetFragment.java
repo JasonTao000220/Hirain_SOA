@@ -7,10 +7,13 @@ import android.icu.lang.UProperty;
 import android.media.AudioManager;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.os.Handler;
 import android.os.Parcelable;
@@ -121,7 +124,8 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
     private LinearLayout saveModeLin;
 
     //设置 是否即刻生效  新建和编辑是保存完之后才会生效
-    private boolean effectiveImmediately=true;
+    public boolean effectiveImmediately=true;
+    private MainActivity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -172,9 +176,10 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
                     upDateMode.setVisibility(View.VISIBLE);
                     break;
                 case 5:
+                    effectiveImmediately=false;
                     switchType(0);
-                    modeNameTv.setVisibility(View.VISIBLE);
-                    modeNameTv.setText(editModeEvent.getModeName());
+//                    modeNameTv.setVisibility(View.VISIBLE);
+//                    modeNameTv.setText(editModeEvent.getModeName());
                     configMode(editModeEvent.getModeName());
                     break;
 
@@ -189,7 +194,7 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-
+        activity = (MainActivity) getActivity();
         initView();
         customMode = new CustomMode();
 
@@ -224,13 +229,15 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
             chairTypeTab.setCurrentTab(customMode.getChairMode());
             rmTypeTab.setCurrentTab(customMode.getRmType());
             rmDirectionTab.setCurrentTab(customMode.getRmStates());
-            Log.i("wxy", "configMode: " + customMode.getRmType() + "===" + customMode.getRmStates());
             switchVolume(customMode.getVolume());
         }
     }
 
     //音量选择
     public void switchVolume(int volume) {
+        if(effectiveImmediately){
+                    activity.firstFragment.cancleMode();
+                }
         vb0.setBackgroundResource(R.color.tm);
         vb1.setBackgroundResource(R.color.tm);
         vb2.setBackgroundResource(R.color.tm);
@@ -364,7 +371,9 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onTabSelect(int position) {
                 Log.i("wxy", "onTabSelect: " + position);
-
+                if(effectiveImmediately){
+                    activity.firstFragment.cancleMode();
+                }
                 //检查后视镜是否打开
                 checkRm();
                 customMode.setRmStates(position);
@@ -381,6 +390,10 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
         rmTypeTab.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
+                if(effectiveImmediately){
+                    activity.firstFragment.cancleMode();
+                }
+
                 rearview_position = position + 1;
                 customMode.setRmType(position);
                 if (position == 1) {
@@ -409,6 +422,9 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
         chairTypeTab.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
+                if(effectiveImmediately){
+                    activity.firstFragment.cancleMode();
+                }
                 customMode.setChairMode(position);
             }
 
@@ -421,6 +437,10 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
         lightTypeTab.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {
+                if(effectiveImmediately){
+                    activity.firstFragment.cancleMode();
+                }
+
                 customMode.setLightMode(position);
             }
 
@@ -431,8 +451,15 @@ public class CarsetFragment extends Fragment implements View.OnClickListener {
         });
         //氛围灯
         atmosphereLampTab.setOnTabSelectListener(new OnTabSelectListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
             @Override
             public void onTabSelect(int position) {
+
+                if(effectiveImmediately){
+                    MainActivity mainActivity= (MainActivity) getActivity();
+                    mainActivity.firstFragment.showAtmosphereLamp(position);
+                    activity.firstFragment.cancleMode();
+                }
                 customMode.setAtmosphereLamp(position);
             }
 

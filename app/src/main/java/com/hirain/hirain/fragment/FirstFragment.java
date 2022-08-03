@@ -1,11 +1,17 @@
 package com.hirain.hirain.fragment;
 
+import android.app.Presentation;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.hardware.display.DisplayManager;
+import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -22,6 +28,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,8 +45,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.hirain.hirain.MainActivity;
+import com.hirain.hirain.MyPresentation;
+import com.hirain.hirain.ShowPresentation;
 import com.hirain.hirain.bean.CustomMode;
 import com.hirain.hirain.bean.ModelItem;
 import com.hirain.hirain.bean.UdpBean;
@@ -74,8 +84,8 @@ import static com.hirain.hirain.R.mipmap.my;
 import static com.hirain.hirain.R.mipmap.nodengguang;
 import static com.hirain.hirain.R.mipmap.nohshijing;
 import static com.hirain.hirain.R.mipmap.zuoyiquanbi;
-
-public class FirstFragment extends Fragment {
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+public class FirstFragment extends Fragment implements View.OnClickListener {
     //todo 模式按钮
     private Button musis,show;
     //todo 自定义模式
@@ -172,6 +182,13 @@ public class FirstFragment extends Fragment {
     private TextView dateTv;
     //氛围灯模式
     private TextView lightMode;
+    private ShowPresentation showPresentation;
+
+    //展示模式 ，音乐模式是否打开 默认关闭
+    public boolean isShowMode;
+    public boolean isMusicMode;
+
+
 
     private void updateProgress() {
         // 使用Handler每间隔1s发送一次空消息，通知进度条更新
@@ -237,6 +254,8 @@ public class FirstFragment extends Fragment {
 
         }
     }
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -248,6 +267,7 @@ public class FirstFragment extends Fragment {
         Intent intent=new Intent(getActivity(), MusicService.class);
         getActivity().bindService(intent,connection,BIND_AUTO_CREATE);
         songList= MainActivity.getSongList();
+
         initView();
 
         initCustomMode();
@@ -262,6 +282,7 @@ public class FirstFragment extends Fragment {
         animation.setDuration(10000);
         animation.setRepeatCount(Animation.INFINITE);//无限循环
         animation.setInterpolator(new LinearInterpolator());//匀速运动插值器
+        mv.setAnimation(animation);
     }
 
     private void initCustomMode() {
@@ -289,13 +310,19 @@ public class FirstFragment extends Fragment {
     }
 
     private void initClick() {
+        bofang.setOnClickListener(this);
+        shangyiso.setOnClickListener(this);
+        xiayiso.setOnClickListener(this);
+        musis.setOnClickListener(this);
+        show.setOnClickListener(this);
+        lightMode.setOnClickListener(this);
         tianjia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {//需要做个判断，判断是否超过多少多少条
                 //添加新模式  ---设置名字----，跳转到第二个页面
              /*   MainActivity activity = (MainActivity) getActivity();
                 activity.selectMenu(R.id.radio_2);*/
-                DialogUtils.customEditView(getActivity(), R.string.save_mode, R.string.dialog_cancle, R.string.dialg_confirm,
+                DialogUtils.customEditView(getActivity(), R.string.set_model, R.string.dialog_cancle, R.string.dialg_confirm,
                         new DialogUtils.onClickListener() {
                             @Override
                             public void leftClickListener() {
@@ -339,7 +366,8 @@ public class FirstFragment extends Fragment {
 
                     @Override
                     public void rightClickListener(String text) {
-
+                        isMusicMode=false;
+                        isShowMode=false;
                         if(myAdapter.mList.get(position).isSel){
                             myAdapter.mList.get(position).setSel(false);
                         }else {
@@ -348,12 +376,21 @@ public class FirstFragment extends Fragment {
                             }
                             myAdapter.mList.get(position).setSel(true);
 
-                        }
+
                         myAdapter.notifyDataSetChanged();
                         startLeft(2,null);
+
+                        CustomMode customMode = MMkvUtils.getmInstance().decodeParcelable(modelItem.getModeName());
+                        if(customMode==null){
+                            customMode=new CustomMode();
+                        }
+                        //更改氛围灯
+                        showAtmosphereLamp(customMode.getAtmosphereLamp());
+                            EventBus.getDefault().post(modelItem.getModeName());
                         EventBus.getDefault().post(new EditModeEvent(modelItem.getModeName(),5));
                         //确认开启
                         ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,modelItem.getModeName()));
+                        }
                     }
                 });
             }
@@ -406,99 +443,26 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        //播放按钮
-        bofang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View viiew) {
-                binder.playMusic();
-                if(!MusicService.mediaPlayer.isPlaying()){
-                    bofang.setImageResource(R.mipmap.play);
-                }else {
-                    bofang.setImageResource(R.mipmap.pause);
-                }
+    }
 
-            }
-        });
-
-        //上一首
-        shangyiso.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binder.previousMusic();
-
-                musicName.setText(songList.get(MusicService.getPos()).getSong());
-
-                    bofang.setImageResource(R.mipmap.pause);
-
-            }
-        });
-        //下一首
-        xiayiso.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binder.nextMusic();
-                musicName.setText(songList.get(MusicService.getPos()).getSong());
-
-                bofang.setImageResource(R.mipmap.pause);
-
-            }
-        });
-
-
-        //todo 模式
-        //音乐
-        musis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogUtils.modeTipView(getActivity(), new DialogUtils.onClickListener() {
-                    @Override
-                    public void leftClickListener() {
-
-                    }
-
-                    @Override
-                    public void rightClickListener(String text) {
-                        //确认开启
-                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"音乐模式"));
-
-                    }
-                });
-            }
-        });
-        //展示
-        show.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DialogUtils.modeTipView(getActivity(), new DialogUtils.onClickListener() {
-                    @Override
-                    public void leftClickListener() {
-
-                    }
-
-                    @Override
-                    public void rightClickListener(String text) {
-
-//                        Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage("com.hirain.lefthirain.ShowModeActivity");
-//
-//                        if (intent != null) {
-//
-//
-//                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                            startActivity(intent);
-//                        }
-
-                        startLeft(1,null);
-                        //确认开启
-                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"展示模式"));
-
-
-                    }
-                });
-
-            }
-        });
-
+    public void showAtmosphereLamp(int atmosphereLamp) {
+        switch (atmosphereLamp) {
+            case 0:
+                lightMode.setText(R.string.close);
+                break;
+            case 1:
+                lightMode.setText(R.string.atmospherelamp_1);
+                break;
+            case 2:
+                lightMode.setText(R.string.atmospherelamp_2);
+                break;
+            case 3:
+                lightMode.setText(R.string.atmospherelamp_3);
+                break;
+            case 4:
+                lightMode.setText(R.string.atmospherelamp_4);
+                break;
+        }
 
     }
 
@@ -507,27 +471,32 @@ public class FirstFragment extends Fragment {
     *  type  1: 展示模式
     *  type  2: 默认模式
     * */
+
     private void startLeft(int type, CustomMode customMode) {
-        String path="com.example.lefthirain.MainActivity";
-        Intent intent = new Intent();
+        DisplayManager displayManager = (DisplayManager) getActivity().getSystemService(Context.DISPLAY_SERVICE);
+
         if(type==1){
-            intent.putExtra("type",1);
+            if(showPresentation==null){
+                showPresentation = new ShowPresentation(getActivity(), displayManager.getDisplay(1));
+            }
+            showPresentation.show();
         }else {
-            intent.putExtra("type",2);
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if(mainActivity.myPresentation==null){
+                mainActivity.myPresentation = new MyPresentation(getActivity(), displayManager.getDisplay(1));
+            }
+            if(showPresentation!=null&&showPresentation.isShowing()){
+                showPresentation.dismiss();
+            }
+            if(!mainActivity.myPresentation.isShowing()){
+                mainActivity.myPresentation.show();
+            }
+
+
+
         }
-        ComponentName componentName = new ComponentName("com.hirain.lefthirain", path);//这里是 包名 以及 页面类的全称
 
 
-        if(customMode!=null){
-            intent.putExtra("data",customMode);
-        }
-
-        intent.setComponent(componentName);
-
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        startActivity(intent);
     }
 
 
@@ -627,9 +596,91 @@ public class FirstFragment extends Fragment {
         super.onDestroy();
         getActivity().unbindService(connection);
         mHandler.removeCallbacksAndMessages(null);
+        if(showPresentation!=null&&showPresentation.isShowing()){
+            showPresentation.dismiss();
+        }
 
     }
 
+    //取消开启的模式  --更改了车辆设置
+    public void cancleMode(){
+        for (int i = 0; i < myAdapter.mList.size(); i++) {
+            myAdapter.mList.get(i).setSel(false);
+        }
+        myAdapter.notifyDataSetChanged();
+        EventBus.getDefault().post("");
+    }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.bofang:
 
+                //播放
+                binder.playMusic();
+                if(!MusicService.mediaPlayer.isPlaying()){
+
+                    bofang.setImageResource(R.mipmap.play);
+                }else {
+
+                    bofang.setImageResource(R.mipmap.pause);
+                }
+                break;
+            case R.id.shangyis:
+                //上一首
+                binder.previousMusic();
+                musicName.setText(songList.get(MusicService.getPos()).getSong());
+                bofang.setImageResource(R.mipmap.pause);
+                break;
+            case R.id.xiayiso:
+                //下一首
+                binder.nextMusic();
+                musicName.setText(songList.get(MusicService.getPos()).getSong());
+
+                bofang.setImageResource(R.mipmap.pause);
+                break;
+            case R.id.musisbutton:
+                //y音乐模式
+                DialogUtils.modeTipView(getActivity(), new DialogUtils.onClickListener() {
+                    @Override
+                    public void leftClickListener() {
+
+                    }
+
+                    @Override
+                    public void rightClickListener(String text) {
+                        isShowMode=false;
+                        isMusicMode=true;
+                        //确认开启
+                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"音乐模式"));
+                        EventBus.getDefault().post("音乐模式");
+                    }
+                });
+                break;
+            case R.id.showbutton:
+                //展示模式
+                DialogUtils.modeTipView(getActivity(), new DialogUtils.onClickListener() {
+                    @Override
+                    public void leftClickListener() {
+                    }
+
+                    @Override
+                    public void rightClickListener(String text) {
+                        isShowMode=true;
+                        isMusicMode=false;
+                        startLeft(1,null);
+                        //确认开启
+                        ToastUtil.showToast(getActivity(),getResources().getString(R.string.mode_start,"展示模式"));
+                        EventBus.getDefault().post("展示模式");
+                    }
+                });
+                break;
+            case R.id.light_mode:
+                //氛围灯模式  跳转到车辆设置---灯光
+                 MainActivity mainActivity= (MainActivity) getActivity();
+                 mainActivity.selectMenu(R.id.radio_2);
+                 mainActivity.carsetFragment.switchType(3);
+                break;
+        }
+    }
 }

@@ -143,7 +143,6 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getMessage(Object event) {
-        Log.i("wxy", "getMessage: AASDASDA");
         /*if(event==1){
             playVideo();
         }else {
@@ -177,7 +176,7 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onStop() {
         super.onStop();
-        Log.i("wxy", "onStop: aa");
+
     }
 
     //选择路线

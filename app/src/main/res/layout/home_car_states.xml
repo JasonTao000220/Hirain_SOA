@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:text="舒适放松"
+            android:text="未开启"
             android:textColor="@color/color_c9cbd1"
             android:layout_centerVertical="true"
             />

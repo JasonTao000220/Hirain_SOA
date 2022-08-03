@@ -16,6 +16,7 @@ import com.hirain.hirain.bean.CustomMode;
 import com.hirain.hirain.bean.ModelItem;
 import com.hirain.hirain.fragment.Bean;
 import com.hirain.hirain.myview.SwipeMenuLayout;
+import com.hirain.hirain.utils.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -82,7 +83,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(mList.get(position).isSel){
+                    ToastUtil.showToast(context,"模式已开启");
+                    return;
+                }
                 if(onItemClickListener!=null){
                     onItemClickListener.itemClick(position);
                 }

@@ -323,6 +323,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="8dp"
                 android:text="模式"
+                android:visibility="gone"
                 android:textColor="@color/white_20"
                 android:textSize="24sp" />
 

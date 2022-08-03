@@ -466,7 +466,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="80dp"
             android:layout_marginTop="40dp"
-            android:text="外部风光"
+            android:text="外部灯光"
             android:textColor="#FFF"
             android:textSize="32sp" />
 
