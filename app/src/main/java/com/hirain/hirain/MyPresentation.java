@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -51,8 +53,21 @@ public class MyPresentation extends Presentation {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getMessage(String mode){
-        modeName.setText(mode);
+    public void getMessage(Object event){
+        Log.i("wxy", "getMessage: "+event.toString());
+        if(event instanceof String){
+            modeName.setText((String)event);
+        }else if(event instanceof List){
+            List<Double> list= (List<Double>) event;
+            int aDouble = (int) (list.get(0)*1.0);
+
+            tireSpeedTv.setText(aDouble+"");
+            gearTv.setText(list.get(1)+"");
+            int spped= (int) (list.get(2)*3.6);
+            speedTv.setText(spped+"");
+            powerTv.setText("8.0");
+        }
+
     }
 
     @Override

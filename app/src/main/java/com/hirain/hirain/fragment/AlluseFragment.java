@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.hirain.hirain.R;
+import com.hirain.hirain.utils.ModelBaseUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,7 +44,9 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout line1Rl, line3Rl, line2Rl, line4Rl;
     private ImageView line1Iv, line2Iv, line3Iv, line4Iv;
     private TextView line1Tv, line2Tv, line3Tv, line4Tv;
-
+    String projectPath = "H:/modelBase/Project/test/test.proj";
+    String oscPath = "H:/modelBase/Project/test/roads/test/test.xosc";
+    String host="192.168.0.218";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -223,13 +226,14 @@ public class AlluseFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.drive_mode_start:
-
-                rightVideo.start();
-                leftVideo.start();
+                ModelBaseUtils.getmInstance().init(host,projectPath,oscPath);
+//                rightVideo.start();
+//                leftVideo.start();
                 break;
             case R.id.drive_mode_stop:
-                rightVideo.pause();
-                leftVideo.pause();
+                ModelBaseUtils.getmInstance().stop();
+//                rightVideo.pause();
+//                leftVideo.pause();
                 break;
             case R.id.drive_line1_rl:
                 initData(R.raw.video6, R.raw.video3);

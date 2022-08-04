@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -25,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -35,6 +37,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.flatbuffers.FlatBufferBuilder;
+import com.hirain.csw.modelbase.Modelbase;
 import com.hirain.hirain.bean.event.EditModeEvent;
 import com.hirain.hirain.dialog.DialogUtils;
 import com.hirain.hirain.flaterbuffers.hsj.ExtMirrorServicelnfo;
@@ -55,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -83,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private FlatBufferBuilder fbb = new FlatBufferBuilder();
     private LocalSocket msocket = new LocalSocket();
     public MyPresentation myPresentation;
+
 
     public static List<Song> getSongList() {
 
@@ -147,7 +152,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
+            //root
+            //recomunt
         }
+
+
+
+
+
+
 
 
         DisplayManager displayManager = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
@@ -255,8 +268,8 @@ public class MainActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(0);
             }
         };
-        timer.schedule(timerTask, 1000, 10000);
-        sendMsg();
+        timer.schedule(timerTask, 1000, 5000);
+//        sendMsg();
     }
 
 
@@ -292,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("socket", "连接失败");
         }
+
 
     }
 
@@ -414,12 +428,9 @@ public class MainActivity extends AppCompatActivity {
         firstFragment.initTime();
         myPresentation.setTime(formatter.format(date));
 //        sendMsg();
-    }
-
-    //添加模式
-    public void tinajianview(View view) {
 
     }
+
 
     @Override
     protected void onDestroy() {
